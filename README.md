@@ -1,5 +1,7 @@
 # Home Ping
 
+Ping des hosts en Vuejs
+
 ## Fonctionement
 - Le fichier `hosts` contient les IP à ping, vous devez respecter le format "ip hostname"
 - Une Tâche cron éxécute toutes les minutes un ping basé sur le fichier `hosts`
@@ -10,10 +12,10 @@
 ├── app.js
 ├── favicon.ico
 ├── getIP.php		# Scripts php qui retourne l'adresse IP local du client
-├── hosts			# Fichier à éditer contenant les IP à ping
+├── hosts		# Fichier à éditer contenant les IP à ping
 ├── index.html
 ├── LICENCE	
-├── ping.sh			# Script qui éxécuter un ping en se basant sur le fichier 'hosts'
+├── ping.sh		# Script qui éxécuter un ping en se basant sur le fichier 'hosts'
 ├── README.md
 ├── result.json		# Résultat du ping au format json extrait par le script 'ping.sh'
 └── VERSION
