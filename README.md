@@ -11,7 +11,7 @@ Ping des hôtes en Vuejs
 .
 ├── app.js
 ├── favicon.ico
-├── getIP.php		# Script php qui retourne l'adresse IP local du client
+├── ip.php		# Script php qui retourne l'adresse IP local du client
 ├── hosts		# Fichier à éditer contenant les IP à ping
 ├── index.html
 ├── LICENCE	
