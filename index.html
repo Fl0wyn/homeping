@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <title>Home Ping</title>
+  <link rel="shortcut icon" href="https://raw.githubusercontent.com/debmus/homeping/master/favicon.ico"
+    type="image/x-icon">
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+</head>
+
+<style>
+  tr:hover {
+    background-color: transparent !important;
+  }
+</style>
+
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+
+        <v-app-bar color="primary" dark>
+          <v-icon large class="mx-4">mdi-home-automation</v-icon>
+          <v-toolbar-title class="d-none d-sm-flex">Home Ping</v-toolbar-title>
+
+          <v-spacer></v-spacer>
+          <v-icon class="ml-6 mr-2 d-none d-md-flex">mdi-file-clock-outline</v-icon>
+          <span>Page actualisée à 12:24:11 </span>
+
+          <section class="d-none d-md-flex">
+            <v-icon class="ml-6 mr-2">mdi-account-circle-outline</v-icon>
+            <span> 192.168.1.42, Linux, Firefox 90</span>
+          </section>
+        </v-app-bar>
+
+        <v-container fluid>
+          <v-row class="ma-6">
+            <v-col cols="12" sm="12" md="6">
+              <v-card>
+                <v-simple-table>
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">Hôte</th>
+                        <th class="text-left hidden-sm-and-down">Adresse IP</th>
+                        <th class="text-left">Satut</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(item, index) in info" :key="index">
+                        <td>
+                          {{ item.name }}
+                        </td>
+                        <td class="hidden-sm-and-down">
+                          {{ item.ip }}
+                        </td>
+                        <td>
+                          <div v-if="item.up == 'true'">
+                            <v-icon small class="mx-1" color="success">mdi-circle</v-icon>
+                            En ligne
+                          </div>
+                          <div v-else>
+                            <v-icon small class="mx-1" color="error">mdi-circle</v-icon>
+                            Non joignable
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+
+      </v-main>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data() {
+        return {
+          info: [],
+        };
+      },
+      mounted() {
+        axios
+          .get("result.json")
+          .then((response) => (this.info = response.data));
+      },
+    })
+  </script>
+
+</body>
+
+</html>
