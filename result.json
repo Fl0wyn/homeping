@@ -1,0 +1,27 @@
+[
+    {
+        "name": "toto",
+        "ip": "192.168.20.9",
+        "up": "true"
+    },
+    {
+        "name": "titi",
+        "ip": "192.168.20.8",
+        "up": "true"
+    },
+    {
+        "name": "tata",
+        "ip": "192.168.20.12",
+        "up": "true"
+    },
+    {
+        "name": "google",
+        "ip": "8.8.8.8",
+        "up": "true"
+    },
+    {
+        "name": "cloudfare",
+        "ip": "1.1.1.1",
+        "up": "true"
+    }
+]
