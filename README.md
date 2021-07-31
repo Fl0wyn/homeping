@@ -2,6 +2,8 @@
 
 Ping des hôtes en Vuejs
 
+Démo static : https://debmus.github.io/homeping/
+
 ## Fonctionement
 - Le fichier `hosts` contient les IP à ping, vous devez respecter le format "ip hostname"
 - Une Tâche cron exécute toutes les minutes un ping basé sur le fichier `hosts`
