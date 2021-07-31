@@ -1,35 +1,30 @@
 # Home Ping
 
-Ping des hosts en Vuejs
+Ping des hôtes en Vuejs
 
 ## Fonctionement
 - Le fichier `hosts` contient les IP à ping, vous devez respecter le format "ip hostname"
-- Une Tâche cron éxécute toutes les minutes un ping basé sur le fichier `hosts`
+- Une Tâche cron exécute toutes les minutes un ping basé sur le fichier `hosts`
 
-### Arborescence
+## Arborescence
 ```bash
 .
 ├── app.js
 ├── favicon.ico
-├── getIP.php		# Scripts php qui retourne l'adresse IP local du client
+├── getIP.php		# Script php qui retourne l'adresse IP local du client
 ├── hosts		# Fichier à éditer contenant les IP à ping
 ├── index.html
 ├── LICENCE	
-├── ping.sh		# Script qui éxécuter un ping en se basant sur le fichier 'hosts'
+├── ping.sh		# Script qui exécute un ping en se basant sur le fichier 'hosts'
 ├── README.md
-├── result.json		# Résultat du ping au format json extrait par le script 'ping.sh'
-└── VERSION
+└── result.json		# Résultat du ping au format json extrait par le script 'ping.sh'
 ```
 
-## Paramétrage Linux 
-1. Copier le dossier `homeping` dans `/var/www/homeping` et appliquer au dossier les droits de l'utilisateur courant 
+## Installation
 ```bash
 git clone https://github.com/debmus/homeping.git
+sudo mv homeping /var/www/
 sudo chown -R $USER: /var/www/homeping
-```
-
-2. Rendre le script `ping.sh` éxécutable 
-```bash
 sudo chmod -x /var/www/homeping/ping.sh
 ```
 
@@ -41,7 +36,7 @@ sudo chmod -x /var/www/homeping/ping.sh
 ## Paramétrage de Apache2
 1.	Installer apache2 et php
 ```bash
-sudo apt install apache2 php
+sudo apt install apache2 php -y
 ```
 
 2.	Activer le module Headers de Apache2
@@ -76,7 +71,12 @@ sudo systemctl restart apache2
 Listen 9292
 ```
 
-5.	Relancer Apche2 et se connecter à l'URL `http://<ip>:9292`
+5.	Activer le vhost
+```bash
+sudo a2ensite homeping.conf
+```
+
+6.	Relancer Apache2 et se connecter à l'URL `http://<ip>:9292`
 ```bash
 sudo systemctl restart apache2
 ```
