@@ -48,7 +48,7 @@ sudo systemctl restart apache2
 ```
 
 3.	Copier le contenu du virtualhost dans `/etc/apache2/sites-available/homeping.conf`
-```bash
+```apache
 <VirtualHost *:9292>
 
 	DocumentRoot /var/www/homeping
