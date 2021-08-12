@@ -1,0 +1,5 @@
+- Système d'alerte en cas de suppression
+- Notification en cas de statu 'DOWN' si 'Enabled' est à 'Yes'
+- Graphique statistique
+- Boite de dialogue pour la création et l'édition
+- 

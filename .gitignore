@@ -1,4 +1,4 @@
-backend
-frontend
+#backend
+#frontend
 temp
-nodes_modules
+node_modules
