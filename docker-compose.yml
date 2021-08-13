@@ -16,8 +16,8 @@ services:
     restart: always
     ports:
       - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+    environment: # ??
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 21232f297a57a5a743894a0e4a801fc3
     volumes:
       - volumes: ./data:/data/db
