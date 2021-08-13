@@ -1,1 +1,21 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87.5 100"><defs><style>.cls-1{fill:#1697f6;}.cls-2{fill:#7bc6ff;}.cls-3{fill:#1867c0;}.cls-4{fill:#aeddff;}</style></defs><title>Artboard 46</title><polyline class="cls-1" points="43.75 0 23.31 0 43.75 48.32"/><polygon class="cls-2" points="43.75 62.5 43.75 100 0 14.58 22.92 14.58 43.75 62.5"/><polyline class="cls-3" points="43.75 0 64.19 0 43.75 48.32"/><polygon class="cls-4" points="64.58 14.58 87.5 14.58 43.75 100 43.75 62.5 64.58 14.58"/></svg>
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="256.000000pt" height="256.000000pt" viewBox="0 0 256.000000 256.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,256.000000) scale(0.100000,-0.100000)"
+fill="#FFFFFF" stroke="none">
+<path d="M1085 2536 c-525 -87 -937 -479 -1051 -1001 -27 -126 -24 -410 6
+-535 104 -430 410 -773 820 -918 148 -52 237 -66 420 -66 237 0 356 27 565
+130 345 169 600 496 681 874 27 127 25 412 -4 535 -116 492 -491 861 -987 971
+-97 21 -349 27 -450 10z m729 -722 l26 -27 0 -507 0 -507 -26 -27 c-38 -38
+-120 -38 -158 0 l-26 27 0 507 0 507 26 27 c22 21 36 26 79 26 43 0 57 -5 79
+-26z m-420 -350 l26 -27 0 -332 0 -332 -26 -27 c-22 -21 -36 -26 -79 -26 -43
+0 -57 5 -79 26 l-26 27 0 332 0 332 26 27 c22 21 36 26 79 26 43 0 57 -5 79
+-26z m-420 -350 c26 -27 26 -27 26 -184 0 -157 0 -157 -26 -184 -22 -21 -36
+-26 -79 -26 -43 0 -57 5 -79 26 -26 27 -26 27 -26 184 0 157 0 157 26 184 22
+21 36 26 79 26 43 0 57 -5 79 -26z"/>
+</g>
+</svg>

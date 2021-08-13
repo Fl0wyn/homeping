@@ -2,4 +2,9 @@
 - Notification en cas de statu 'DOWN' si 'Enabled' est à 'Yes'
 - Graphique statistique
 - Boite de dialogue pour la création et l'édition
-- 
+- Modifier export json[ok] ou csv[ko] (https://www.npmjs.com/package/json2csv)
+- Importer json ou csv
+- Vérifier IP dans le champ ip de la création d'un hôte
+- Thème sombre
+- Favicon couleur blue-grey
+- Authentification utilisateur

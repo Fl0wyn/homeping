@@ -1,7 +1,8 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <v-icon large class="mx-4">mdi-home-automation</v-icon>
+    <v-app-bar app color="blue-grey" dense dark>
+      <!-- <v-icon large class="mx-4">mdi-home-automation</v-icon> -->
+      <img src="./assets/logo.svg" width="28px" class="mx-4" alt="">
       <v-toolbar-title class="d-none d-sm-flex">Ping Monitor</v-toolbar-title>
 
 <!--       <v-spacer></v-spacer>
