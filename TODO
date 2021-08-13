@@ -8,3 +8,6 @@
 - Thème sombre
 - Favicon couleur blue-grey
 - Authentification utilisateur
+
+
+- VERSION / Dockerfile / docker-compose.yml / build.sh / .dockerignore
