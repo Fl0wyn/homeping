@@ -12,10 +12,10 @@
             :hide-default-footer="true"
           >
             <template v-slot:[`item.alive`]="{ item }">
-              <v-chip v-if="item.title == 'a'" small color="green" dark>
+              <v-chip v-if="item.title == 'a'" small color="success" dark>
                 <b> UP </b>
               </v-chip>
-              <v-chip v-else small color="red" dark> <b> DOWN</b> </v-chip>
+              <v-chip v-else small color="error" dark><b> DOWN </b></v-chip>
             </template>
 
             <template v-slot:[`item.actions`]="{ item }">
@@ -79,7 +79,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <!-- START : dialog1 -->
+    <!-- START : DIALOG -->
     <!-- START : ADD -->
     <v-dialog v-model="dialog1" max-width="350">
       <v-card tile>
@@ -142,14 +142,14 @@
       </v-card>
     </v-dialog>
     <!-- END : REMOVE ALL -->
-    <!-- END : dialog -->
+    <!-- END : DIALOG -->
 
-    <!-- START : Snackbar -->
+    <!-- START : SNACKBAR -->
     <v-snackbar v-model="snackbar" top :color="colorSnackbar" timeout="1200">
       <v-icon class="mr-2">{{ iconSnackbar }}</v-icon>
       <b>{{ textSnackbar }} </b>
     </v-snackbar>
-    <!-- END : Snackbar -->
+    <!-- END : SNACKBAR -->
   </v-container>
 </template>
 
@@ -186,11 +186,11 @@ export default {
       headers: [
         { text: "Hostname", align: "start", sortable: false, value: "title" },
         { text: "IP", value: "description", sortable: false },
-        { text: "Status", value: "alive", sortable: false },
+        { text: "Status", value: "alive", sortable: false, align: "center" },
         { text: "Uptime", value: "uptime", sortable: false },
         { text: "TTL", value: "ttl", sortable: false },
-        { text: "Enabled", value: "status", sortable: false },
-        { text: "Actions", value: "actions", sortable: false },
+        { text: "Enabled", value: "status", sortable: false, align: "center" },
+        { text: "Actions", value: "actions", sortable: false, align: "center" },
       ],
     };
   },
