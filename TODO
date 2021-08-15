@@ -9,5 +9,6 @@
 - Favicon couleur blue-grey
 - Authentification utilisateur
 - Vérifier que l'hôte ou l'IP n'existe pas déja 
+- Toggle activation du ping dans le dialog 'Add new host'
 
 - VERSION / Dockerfile / docker-compose.yml / build.sh / .dockerignore

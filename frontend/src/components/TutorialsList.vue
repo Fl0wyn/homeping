@@ -36,7 +36,11 @@
               <v-btn-toggle borderless group>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on" @click.stop="dialog = true">
+                    <v-btn
+                      v-bind="attrs"
+                      v-on="on"
+                      @click.stop="dialog1 = true"
+                    >
                       <v-icon>mdi-plus-circle</v-icon>
                     </v-btn>
                   </template>
@@ -61,34 +65,33 @@
                   <span>Export</span>
                 </v-tooltip>
 
-                <v-tooltip bottom>
+                <!--                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn v-bind="attrs" v-on="on">
                       <v-icon>mdi-cloud-upload</v-icon>
                     </v-btn>
                   </template>
                   <span>Import</span>
-                </v-tooltip>
+                </v-tooltip> -->
               </v-btn-toggle>
             </template>
           </v-toolbar>
         </v-card>
       </v-col>
     </v-row>
-    <!-- 
-      START : Dialog
-     -->
-    <v-dialog v-model="dialog" max-width="350">
+    <!-- START : dialog1 -->
+    <!-- START : ADD -->
+    <v-dialog v-model="dialog1" max-width="350">
       <v-card tile>
         <v-toolbar dark color="blue-grey" dense>
           <v-toolbar-title> Add new host</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon @click="dialog = false">
+          <v-btn icon @click="dialog1 = false">
             <v-icon> mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
 
-        <div class="submit-form mx-auto mt-6">
+        <div class="submit-form mx-auto mt-4">
           <div v-if="!submitted">
             <v-form ref="form" lazy-validation>
               <v-text-field
@@ -113,17 +116,6 @@
                 <!-- to="/tutorials" -->
                 Submit
               </v-btn>
-
-              <v-snackbar
-                v-model="snackbar"
-                right
-                color="success"
-                timeout="1500"
-              >
-                <v-icon class="mr-2">mdi-check-circle</v-icon>
-
-                New host successfully added
-              </v-snackbar>
             </v-card-actions>
           </div>
 
@@ -134,9 +126,30 @@
         </div>
       </v-card>
     </v-dialog>
-    <!-- 
-      END : Dialog
-     -->
+    <!-- END : ADD -->
+    <!-- START : REMOVE ALL -->
+    <v-dialog v-model="dialog2" max-width="350">
+      <v-card tile>
+        <v-toolbar dark color="blue-grey" dense>
+          <v-toolbar-title> Add new host</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="dialog2 = false">
+            <v-icon> mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+
+        <v-btn></v-btn>
+      </v-card>
+    </v-dialog>
+    <!-- END : REMOVE ALL -->
+    <!-- END : dialog -->
+
+    <!-- START : Snackbar -->
+    <v-snackbar v-model="snackbar" top :color="colorSnackbar" timeout="1200">
+      <v-icon class="mr-2">{{ iconSnackbar }}</v-icon>
+      <b>{{ textSnackbar }} </b>
+    </v-snackbar>
+    <!-- END : Snackbar -->
   </v-container>
 </template>
 
@@ -150,8 +163,14 @@ export default {
 
   data() {
     return {
-      dialog: false,
+      dialog1: false,
+      dialog2: false,
+
+      // Snackbar
       snackbar: false,
+      textSnackbar: "",
+      colorSnackbar: "",
+      iconSnackbar: "",
 
       text: `Submitted successfully!`,
       tutorial: {
@@ -177,25 +196,39 @@ export default {
   },
 
   methods: {
+    newSnackbar(text, color, icon) {
+      this.snackbar = true;
+      this.textSnackbar = text;
+      this.colorSnackbar = color;
+      this.iconSnackbar = icon;
+    },
+
     saveTutorial() {
       var data = {
         title: this.tutorial.title,
         description: this.tutorial.description,
       };
 
-      TutorialDataService.create(data)
-        .then((response) => {
-          this.tutorial.id = response.data.id;
-          console.log(response.data);
-          this.submitted = true;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      if (!this.tutorial.title || !this.tutorial.description) {
+        this.newSnackbar("Error: empty field", "error", "mdi-close-circle");
+      } else {
+        TutorialDataService.create(data)
+          .then((response) => {
+            this.tutorial.id = response.data.id;
+            console.log(response.data);
+            this.submitted = true;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
 
-      this.refreshList();
-      //this.dialog = false;
-      this.snackbar = true;
+        this.refreshList();
+        this.newSnackbar(
+          "Success: New host added",
+          "success",
+          "mdi-check-circle"
+        );
+      }
     },
 
     newTutorial() {
