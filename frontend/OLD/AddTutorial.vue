@@ -1,7 +1,5 @@
 <template>
-  <div class="submit-form mt-3 mx-auto">
-    <p class="headline">Add Host</p>
-
+  <div class="submit-form mx-auto mt-6">
     <div v-if="!submitted">
       <v-form ref="form" lazy-validation>
         <v-text-field
@@ -19,25 +17,18 @@
         ></v-text-field>
       </v-form>
 
-      <v-btn class="mr-2 mt-3" color="light" to="/tutorials">
-        <v-icon>mdi-arrow-left-bold</v-icon>
-      </v-btn>
-      <v-btn color="primary" class="mt-3" @click="saveTutorial">Submit</v-btn>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+
+        <v-btn color="blue-grey" outlined @click="saveTutorial">
+          <!-- to="/tutorials" -->
+          Submit
+        </v-btn>
+      </v-card-actions>
     </div>
 
     <div v-else>
-      <v-card class="mx-auto">
-        <v-card-title> Submitted successfully! </v-card-title>
-
-        <v-card-subtitle> Click the "add" button to add new Host. </v-card-subtitle>
-
-        <v-card-actions>
-          <v-btn class="mr-2" color="light" to="/tutorials">
-            <v-icon>mdi-arrow-left-bold</v-icon>
-          </v-btn>
-          <v-btn color="primary" @click="newTutorial">Add</v-btn>
-        </v-card-actions>
-      </v-card>
+      {{ newTutorial() }}
     </div>
   </div>
 </template>
@@ -49,6 +40,7 @@ export default {
   name: "add-tutorial",
   data() {
     return {
+      text: `Submitted successfully!`,
       tutorial: {
         id: null,
         title: "",

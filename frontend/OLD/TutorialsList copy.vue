@@ -1,6 +1,16 @@
 <template>
   <v-container>
+    <!-- <v-row align="center" class="list px-3 mx-auto"> -->
+
     <v-row>
+      <!--     <v-col cols="12" md="8">
+      <v-text-field v-model="title" label="Search by Title"></v-text-field>
+    </v-col>
+
+    <v-col cols="12" md="4">
+      <v-btn small @click="searchTitle"> Search </v-btn>
+    </v-col>
+ -->
       <v-col cols="12" lg="6" sm="12">
         <v-card class="mx-auto" tile>
           <v-card-title>Dashboard</v-card-title>
@@ -22,8 +32,61 @@
               <v-icon @click="editTutorial(item.id)">mdi-playlist-edit</v-icon>
 
               <v-icon @click="deleteTutorial(item.id)">mdi-delete</v-icon>
+
+              <!--             <v-icon
+              color="blue-grey"
+              class="mr-2"
+              @click="editTutorial(item.id)"
+              >mdi-pencil</v-icon
+            >
+ -->
+              <!--             <v-icon color="blue-grey" @click="deleteTutorial(item.id)"
+              >mdi-delete</v-icon
+            > -->
+              <!--             <v-dialog v-model="dialog" max-width="300">
+              <v-card>
+                <v-card-title class="text-h5">
+                  Delete {{ item.title }} ?
+                </v-card-title>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+
+                  <v-btn color="success" text @click="deleteTutorial(item.id)">
+                    Yes
+                  </v-btn>
+
+                  <v-btn color="error" outlined dark @click="dialog = false">
+                    No
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog> -->
             </template>
           </v-data-table>
+
+          <!--  <v-divider class="mb-4"></v-divider> -->
+
+          <!--         <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <span v-bind="attrs" v-on="on"> -->
+          <!--         <router-link to="/add">
+          <v-simple-table>
+            <template v-slot:default>
+              <tbody>
+                <tr>
+                  <td class="text-center">
+                    <v-icon color="blue-grey">mdi-plus-circle</v-icon>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </router-link> -->
+          <!--             </span>
+          </template>
+          <span>Add a new host</span>
+        </v-tooltip> -->
         </v-card>
       </v-col>
 
@@ -72,95 +135,42 @@
               </v-btn-toggle>
             </template>
           </v-toolbar>
+
         </v-card>
       </v-col>
     </v-row>
     <!-- 
-      START : Dialog
+      Dialog
      -->
-    <v-dialog v-model="dialog" max-width="350">
+    <v-dialog v-model="dialog" max-width="340">
       <v-card tile>
         <v-toolbar dark color="blue-grey" dense>
           <v-toolbar-title> Add new host</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon @click="dialog = false">
+          <v-btn icon @click="dialog = false & refreshList()" >
             <v-icon> mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
-
-        <div class="submit-form mx-auto mt-6">
-          <div v-if="!submitted">
-            <v-form ref="form" lazy-validation>
-              <v-text-field
-                v-model="tutorial.title"
-                :rules="[(v) => !!v || 'Hostname is required']"
-                label="Hostname"
-                required
-              ></v-text-field>
-
-              <v-text-field
-                v-model="tutorial.description"
-                :rules="[(v) => !!v || 'IP is required']"
-                label="IP"
-                required
-              ></v-text-field>
-            </v-form>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-
-              <v-btn color="blue-grey" outlined @click="saveTutorial">
-                <!-- to="/tutorials" -->
-                Submit
-              </v-btn>
-
-              <v-snackbar
-                v-model="snackbar"
-                right
-                color="success"
-                timeout="1500"
-              >
-                <v-icon class="mr-2">mdi-check-circle</v-icon>
-
-                New host successfully added
-              </v-snackbar>
-            </v-card-actions>
-          </div>
-
-          <div v-else>
-            <v-alert type="success"></v-alert>
-            {{ newTutorial() }}
-          </div>
-        </div>
+        <AddTutorial />
       </v-card>
     </v-dialog>
-    <!-- 
-      END : Dialog
-     -->
   </v-container>
 </template>
 
 <script>
 import TutorialDataService from "../services/TutorialDataService";
+import AddTutorial from "./AddTutorial";
 
 import axios from "axios";
 
 export default {
   name: "tutorials-list",
-
+  components: {
+    AddTutorial,
+  },
   data() {
     return {
       dialog: false,
-      snackbar: false,
-
-      text: `Submitted successfully!`,
-      tutorial: {
-        id: null,
-        title: "",
-        description: "",
-        published: false,
-      },
-      submitted: false,
 
       tutorials: [],
       title: "",
@@ -177,33 +187,6 @@ export default {
   },
 
   methods: {
-    saveTutorial() {
-      var data = {
-        title: this.tutorial.title,
-        description: this.tutorial.description,
-      };
-
-      TutorialDataService.create(data)
-        .then((response) => {
-          this.tutorial.id = response.data.id;
-          console.log(response.data);
-          this.submitted = true;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
-      this.refreshList();
-      //this.dialog = false;
-      this.snackbar = true;
-    },
-
-    newTutorial() {
-      this.submitted = false;
-      this.tutorial = {};
-      this.$refs.form.reset();
-    },
-
     onClick() {
       var date = new Date();
       axios({
@@ -308,9 +291,5 @@ export default {
 <style>
 .list {
   max-width: 750px;
-}
-
-.submit-form {
-  max-width: 300px;
 }
 </style>
