@@ -7,5 +7,4 @@
 - Authentification utilisateur
 - Toggle activation du ping dans le dialog 'Add new host'
 
-- Boite de dialogue pour l'édition
 - VERSION / Dockerfile / docker-compose.yml / build.sh / .dockerignore

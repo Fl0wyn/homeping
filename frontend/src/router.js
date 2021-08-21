@@ -15,7 +15,7 @@ export default new Router({
     {
       path: "/:id",
       name: "home-details",
-      component: () => import("./components/Tutorial")
+      component: () => import("./components/Edit")
     },
 /*     {
       path: "/",
