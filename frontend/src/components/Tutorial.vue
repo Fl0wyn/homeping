@@ -22,7 +22,7 @@
 
       <v-divider class="my-5"></v-divider>
 
-      <v-btn small class="mr-2" color="light" to="/home">
+      <v-btn small class="mr-2" color="light" to="/">
         <v-icon>mdi-arrow-left-bold</v-icon>
       </v-btn>
 
@@ -65,7 +65,7 @@
 import DataService from "../services/DataService";
 
 export default {
-  name: "tutorial",
+  name: "home-details",
   data() {
     return {
       currentTutorial: null,
@@ -106,7 +106,7 @@ export default {
       DataService.update(this.currentTutorial.id, this.currentTutorial)
         .then((response) => {
           console.log(response.data);
-          this.message = "The tutorial was updated successfully!";
+          this.message = "The home was updated successfully!";
         })
         .catch((e) => {
           console.log(e);
@@ -117,7 +117,7 @@ export default {
       DataService.delete(this.currentTutorial.id)
         .then((response) => {
           console.log(response.data);
-          this.$router.push({ name: "home" });
+          this.$router.push({ name: "/" });
         })
         .catch((e) => {
           console.log(e);

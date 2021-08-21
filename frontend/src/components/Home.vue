@@ -4,7 +4,7 @@
       <v-col cols="12" lg="6" sm="12">
         <v-card class="mb-4">
           <v-toolbar flat dense>
-            Data updated today at : {{ time }}
+            Updated today at : {{ time }}
 
             <v-spacer></v-spacer>
 
@@ -19,7 +19,7 @@
                     v-on="on"
                     @click.stop="dialog1 = true"
                   >
-                    <v-icon>mdi-plus</v-icon>
+                    <v-icon>mdi-plus-circle-outline</v-icon>
                   </v-btn>
                 </template>
                 <span>Add new host</span>
@@ -81,7 +81,7 @@
             </template>
 
             <template v-slot:[`item.actions`]="{ item }">
-              <v-tooltip left>
+              <!--               <v-tooltip left>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     icon
@@ -89,13 +89,44 @@
                     v-bind="attrs"
                     v-on="on"
                     class="mx-1"
-                    @click="editTutorial(item.id)"
-                  >
-                    <v-icon>mdi-pencil-outline</v-icon>
-                  </v-btn>
+                    @click="dialog3 = true"
+                  > -->
+              <!-- @click="editTutorial(item.id) -->
+              <v-icon @click="dialog3 = true">mdi-pencil-outline</v-icon>
+              <!--                   </v-btn>
                 </template>
                 <span>Edit</span>
-              </v-tooltip>
+              </v-tooltip> -->
+
+              <!-- START : EDIT -->
+              <v-dialog v-model="dialog3" max-width="350">
+                <v-card tile>
+                  <v-toolbar dark color="primary" dense>
+                    <v-toolbar-title>Edit hosts</v-toolbar-title>
+
+                    {{ item.id }}
+
+                    <v-spacer></v-spacer>
+
+                    <v-btn icon @click="dialog3 = false">
+                      <v-icon> mdi-close</v-icon>
+                    </v-btn>
+                  </v-toolbar>
+
+                  456
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="success" outlined @click="removeAllTutorials">
+                      YES
+                    </v-btn>
+                    <v-btn color="error" outlined @click="dialog2 = false">
+                      NO
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <!-- END : EDIT -->
 
               <v-tooltip right>
                 <template v-slot:activator="{ on, attrs }">
@@ -247,12 +278,13 @@ import axios from "axios";
 import ipRegex from "ip-regex";
 
 export default {
-  name: "home-list",
+  name: "homes",
 
   data() {
     return {
       dialog1: false,
       dialog2: false,
+      dialog3: false,
 
       snackbar: false,
       textSnackbar: "",
@@ -289,7 +321,7 @@ export default {
     onClick() {
       var date = new Date();
       axios({
-        url: "http://localhost:8080/api/home",
+        url: "http://localhost:8080/api/homes",
         method: "GET",
         responseType: "blob",
       }).then((response) => {
@@ -389,7 +421,7 @@ export default {
     },
 
     editTutorial(id) {
-      this.$router.push({ name: "tutorial-details", params: { id: id } });
+      this.$router.push({ name: "home-details", params: { id: id } });
     },
 
     deleteTutorial(id) {

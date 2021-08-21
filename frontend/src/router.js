@@ -13,7 +13,7 @@ export default new Router({
       component: () => import("./components/Home")
     },
     {
-      path: "/home/:id",
+      path: "/:id",
       name: "home-details",
       component: () => import("./components/Tutorial")
     },
