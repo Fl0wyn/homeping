@@ -5,6 +5,9 @@
 - Importer/Exporrer json ou csv
 - Vérifier que l'hôte ou l'IP n'existe pas déja 
 - Authentification utilisateur
-- Toggle activation du ping dans le dialog 'Add new host'
 
 - VERSION / Dockerfile / docker-compose.yml / build.sh / .dockerignore
+
+--
+-- TERMINER Edit : snackbar delete/update
+-- 

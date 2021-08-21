@@ -5,8 +5,8 @@
       color="dali"
       class="d-flex flex-column justify-space-between align-center"
     >
-      <v-card width="350">
-        <v-toolbar dark color="primary" dense>
+      <v-card width="700">
+        <v-toolbar flat dark color="primary" dense>
           <v-toolbar-title> Edit Host</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn icon to="/">
@@ -18,56 +18,67 @@
           <p class="headline my-4"></p>
 
           <v-form ref="form" lazy-validation>
-            <v-text-field
-              v-model="currentTutorial.title"
-              :rules="[(v) => !!v || 'Title is required']"
-              label="Hostname"
-              required
-            ></v-text-field>
+            <v-row class="mt-6">
+              <v-col cols="12" sm="12" lg="6">
+                <v-text-field
+                  v-model="currentTutorial.title"
+                  :rules="[(v) => !!v || 'Title is required']"
+                  label="Hostname"
+                  required
+                ></v-text-field>
 
-            <v-text-field
-              v-model="currentTutorial.description"
-              :rules="[(v) => !!v || 'Description is required']"
-              label="IP"
-              required
-            ></v-text-field>
+                <v-text-field
+                  v-model="currentTutorial.description"
+                  :rules="[(v) => !!v || 'Description is required']"
+                  label="IP"
+                  required
+                ></v-text-field>
+              </v-col>
 
-            <label><strong>Enabled:</strong></label>
-            {{ currentTutorial.published ? "Yes" : "No" }}
+              <v-col cols="12" sm="12" lg="6">
+                <v-text-field
+                  :value="currentTutorial.published ? 'Yes' : 'No'"
+                  label="Enabled"
+                  readonly
+                ></v-text-field>
 
-            <v-divider class="my-5"></v-divider>
+                <br />
 
-            <v-btn small class="mr-2" color="light" to="/">
-              <v-icon>mdi-arrow-left-bold</v-icon>
-            </v-btn>
+                <v-btn
+                  v-if="currentTutorial.published"
+                  @click="updatePublished(false)"
+                  outlined
+                  color="dark"
+                  class="mr-2"
+                  width="110"
+                >
+                  Disabled
+                </v-btn>
+                <v-btn
+                  v-else
+                  @click="updatePublished(true)"
+                  outlined
+                  color="dark"
+                  class="mr-2"
+                  width="110"
+                >
+                  Enabled
+                </v-btn>
 
-            <v-btn
-              v-if="currentTutorial.published"
-              @click="updatePublished(false)"
-              small
-              color="primary"
-              class="mr-2"
-            >
-              Disabled
-            </v-btn>
+                <v-btn
+                  outlined
+                  color="error"
+                  class="mr-2"
+                  @click="deleteTutorial"
+                >
+                  Delete
+                </v-btn>
 
-            <v-btn
-              v-else
-              @click="updatePublished(true)"
-              small
-              color="primary"
-              class="mr-2"
-            >
-              Enabled
-            </v-btn>
-
-            <v-btn small color="error" class="mr-2" @click="deleteTutorial">
-              Delete
-            </v-btn>
-
-            <v-btn small color="success" @click="updateTutorial">
-              Update
-            </v-btn>
+                <v-btn outlined color="success" @click="updateTutorial">
+                  Update
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-form>
 
           <p class="mt-3">{{ message }}</p>
@@ -90,6 +101,7 @@ export default {
     return {
       currentTutorial: null,
       message: "",
+      switch1: false,
     };
   },
   methods: {
@@ -153,7 +165,7 @@ export default {
 
 <style>
 .edit-form {
-  max-width: 300px;
+  max-width: 650px;
   margin: auto;
 }
 </style>
