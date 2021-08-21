@@ -1,13 +1,11 @@
-- Notification en cas de statu 'DOWN' si 'Enabled' est à 'Yes'
+- Notification en cas de status 'DOWN' si 'Enabled' est à 'Yes'
 
 - Graphique statistique
 - Modifier export json[ok] ou csv[ko] (https://www.npmjs.com/package/json2csv)
-- Importer json ou csv
+- Importer/Exporrer json ou csv
 - Vérifier que l'hôte ou l'IP n'existe pas déja 
 - Authentification utilisateur
 - Toggle activation du ping dans le dialog 'Add new host'
-- Traduction
 
+- Boite de dialogue pour l'édition
 - VERSION / Dockerfile / docker-compose.yml / build.sh / .dockerignore
-
-- Boite de dialogue pour la création et l'édition
