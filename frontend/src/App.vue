@@ -7,10 +7,10 @@
 
       <v-spacer></v-spacer>
 
-      <span>
+      <div>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-icon large v-bind="attrs" v-on="on" @click="toggleTheme()"
+            <v-icon class="mr-4" v-bind="attrs" v-on="on" @click="toggleTheme()"
               >mdi-theme-light-dark</v-icon
             >
           </template>
@@ -19,39 +19,33 @@
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-icon
-              class="mx-4"
-              large
-              v-bind="attrs"
-              v-on="on"
-              @click="$router.go()"
+            <v-icon v-bind="attrs" v-on="on" @click="$router.go()"
               >mdi-refresh</v-icon
             >
           </template>
           <span>Reload page</span>
         </v-tooltip>
+      </div>
 
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon large v-bind="attrs" v-on="on" @click="onClick()"
-              >mdi-cloud-download</v-icon
-            >
-          </template>
-          <span>Export data (json)</span>
-        </v-tooltip>
-      </span>
+      <v-divider class="mx-6" dark vertical></v-divider>
 
-      <v-divider class="mx-8" dark vertical></v-divider>
+      <div class="text-center">
+        {{ dateLive }}
+        <br />
+        {{ timeLive }}
+      </div>
 
-      <span>
+      <v-divider class="mx-6" dark vertical></v-divider>
+
+      <div>
         {{ ipInfo }}
         <br />
         {{ osInfo() }},
         {{ navigatorInfo() }}
-      </span>
+      </div>
     </v-app-bar>
 
-    <v-main class="mt-12 px-8">
+    <v-main class="ma-8">
       <router-view />
     </v-main>
   </v-app>
@@ -66,6 +60,8 @@ export default {
 
   data: () => ({
     ipInfo: "",
+    timeLive: new Date().toLocaleTimeString(),
+    dateLive: new Date().toLocaleDateString(),
   }),
 
   methods: {
@@ -106,6 +102,12 @@ export default {
     axios
       .get("http://localhost:8080/ip")
       .then((response) => (this.ipInfo = response.data));
+
+    window.setInterval(() => {
+      var date = new Date();
+      this.timeLive = date.toLocaleTimeString();
+      this.dateLive = date.toLocaleDateString();
+    }, 1 * 1000 * 1);
   },
 };
 </script>

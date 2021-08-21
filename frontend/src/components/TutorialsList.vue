@@ -1,9 +1,56 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
       <v-col cols="12" lg="6" sm="12">
+        <v-card class="mb-4">
+          <v-toolbar flat dense>
+            Data updated at : <b class="mx-1"> {{ time }} </b>
+            <v-spacer></v-spacer>
+            <template>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    class="mx-4"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click.stop="dialog1 = true"
+                    >mdi-plus-circle</v-icon
+                  >
+                </template>
+                <span>Add new host</span>
+              </v-tooltip>
+
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    class="mr-4"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click.stop="dialog2 = true"
+                    >mdi-delete</v-icon
+                  >
+                </template>
+                <span>Remove all hosts</span>
+              </v-tooltip>
+
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    class="mr-4"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="onClick()"
+                    >mdi-cloud-download</v-icon
+                  >
+                </template>
+                <span>Export data (json)</span>
+              </v-tooltip>
+            </template>
+          </v-toolbar>
+        </v-card>
+
         <v-card class="mx-auto" tile>
-          <v-card-title>Dashboard</v-card-title>
+          <!-- <v-card-title>Dashboard</v-card-title> -->
 
           <v-data-table :headers="headers" :items="tutorials">
             <template v-slot:[`item.alive`]="{ item }">
@@ -24,8 +71,7 @@
       </v-col>
 
       <!-- START : ACTIONS -->
-
-      <v-col cols="12" lg="6" sm="12">
+      <!--       <v-col cols="12" lg="6" sm="12">
         <v-card class="mx-auto" tile>
           <v-card-title class="">Actions</v-card-title>
 
@@ -57,20 +103,11 @@
                   </template>
                   <span>Remove all hosts</span>
                 </v-tooltip>
-
-                <!--                 <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on">
-                      <v-icon>mdi-cloud-upload</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Import</span>
-                </v-tooltip> -->
               </v-btn-toggle>
             </template>
           </v-toolbar>
         </v-card>
-      </v-col>
+      </v-col> -->
       <!-- END : ACTIONS -->
     </v-row>
     <!-- START : DIALOG -->
@@ -107,7 +144,6 @@
               <v-spacer></v-spacer>
 
               <v-btn color="success" outlined @click="saveTutorial">
-                <!-- to="/tutorials" -->
                 Add
               </v-btn>
             </v-card-actions>
@@ -177,6 +213,8 @@ export default {
       textSnackbar: "",
       colorSnackbar: "",
       iconSnackbar: "",
+
+      time: new Date().toLocaleTimeString(),
 
       text: `Submitted successfully!`,
       tutorial: {
@@ -323,6 +361,7 @@ export default {
     this.retrieveTutorials();
 
     window.setInterval(() => {
+      this.time = new Date().toLocaleTimeString();
       this.retrieveTutorials();
     }, 30 * 1000 * 1);
   },
