@@ -35,6 +35,15 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 
+
+app.get('/ip', (req, res) => {
+  var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  if (ip.substr(0, 7) == "::ffff:")
+    ip = ip.substr(7)
+
+  res.json(ip);
+});
+
 require("./app/routes/turorial.routes")(app);
 
 // set port, listen for requests

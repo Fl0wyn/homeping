@@ -17,10 +17,10 @@ export default new Router({
       name: "tutorial-details",
       component: () => import("./components/Tutorial")
     },
-/*     {
-      path: "/add",
-      name: "add",
-      component: () => import("./components/AddTutorial")
-    } */
+    /*     {
+          path: "/add",
+          name: "add",
+          component: () => import("./components/AddTutorial")
+        } */
   ]
 });

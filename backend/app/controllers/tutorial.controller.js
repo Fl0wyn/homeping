@@ -1,5 +1,6 @@
 const db = require("../models");
 const Tutorial = db.tutorials;
+const ipRegex = require('ip-regex');
 
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
@@ -9,6 +10,10 @@ exports.create = (req, res) => {
     return;
   }
 
+  if (!ipRegex({ exact: true }).test(req.body.description)) {
+    res.status(400).send({ message: "Invalid IP" });
+    return;
+  }
   // Create a Tutorial
   const tutorial = new Tutorial({
     title: req.body.title,

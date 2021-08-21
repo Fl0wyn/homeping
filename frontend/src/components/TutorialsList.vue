@@ -5,12 +5,7 @@
         <v-card class="mx-auto" tile>
           <v-card-title>Dashboard</v-card-title>
 
-          <v-data-table
-            :headers="headers"
-            :items="tutorials"
-            disable-pagination
-            :hide-default-footer="true"
-          >
+          <v-data-table :headers="headers" :items="tutorials">
             <template v-slot:[`item.alive`]="{ item }">
               <v-chip v-if="item.title == 'a'" small color="success" dark>
                 <b> UP </b>
@@ -19,13 +14,16 @@
             </template>
 
             <template v-slot:[`item.actions`]="{ item }">
-              <v-icon @click="editTutorial(item.id)">mdi-playlist-edit</v-icon>
-
+              <v-icon class="mx-2" @click="editTutorial(item.id)"
+                >mdi-playlist-edit</v-icon
+              >
               <v-icon @click="deleteTutorial(item.id)">mdi-delete</v-icon>
             </template>
           </v-data-table>
         </v-card>
       </v-col>
+
+      <!-- START : ACTIONS -->
 
       <v-col cols="12" lg="6" sm="12">
         <v-card class="mx-auto" tile>
@@ -49,20 +47,15 @@
 
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on" @click="removeAllTutorials">
+                    <v-btn
+                      v-bind="attrs"
+                      v-on="on"
+                      @click.stop="dialog2 = true"
+                    >
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </template>
-                  <span>Remove All</span>
-                </v-tooltip>
-
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on" @click="onClick()">
-                      <v-icon>mdi-cloud-download</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Export</span>
+                  <span>Remove all hosts</span>
                 </v-tooltip>
 
                 <!--                 <v-tooltip bottom>
@@ -78,12 +71,13 @@
           </v-toolbar>
         </v-card>
       </v-col>
+      <!-- END : ACTIONS -->
     </v-row>
     <!-- START : DIALOG -->
     <!-- START : ADD -->
     <v-dialog v-model="dialog1" max-width="350">
       <v-card tile>
-        <v-toolbar dark color="blue-grey" dense>
+        <v-toolbar dark color="primary" dense>
           <v-toolbar-title> Add new host</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn icon @click="dialog1 = false">
@@ -112,9 +106,9 @@
             <v-card-actions>
               <v-spacer></v-spacer>
 
-              <v-btn color="blue-grey" outlined @click="saveTutorial">
+              <v-btn color="success" outlined @click="saveTutorial">
                 <!-- to="/tutorials" -->
-                Submit
+                Add
               </v-btn>
             </v-card-actions>
           </div>
@@ -130,15 +124,27 @@
     <!-- START : REMOVE ALL -->
     <v-dialog v-model="dialog2" max-width="350">
       <v-card tile>
-        <v-toolbar dark color="blue-grey" dense>
-          <v-toolbar-title> Add new host</v-toolbar-title>
+        <v-toolbar dark color="primary" dense>
+          <v-toolbar-title>Remove all hosts</v-toolbar-title>
+
           <v-spacer></v-spacer>
+
           <v-btn icon @click="dialog2 = false">
             <v-icon> mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
 
-        <v-btn></v-btn>
+        <v-card-title class="pa-6 secondary--text">
+          Are your sure ?
+        </v-card-title>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="success" outlined @click="removeAllTutorials">
+            YES
+          </v-btn>
+          <v-btn color="error" outlined @click="dialog2 = false"> NO </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
     <!-- END : REMOVE ALL -->
@@ -156,7 +162,7 @@
 <script>
 import TutorialDataService from "../services/TutorialDataService";
 
-import axios from "axios";
+import ipRegex from "ip-regex";
 
 export default {
   name: "tutorials-list",
@@ -212,22 +218,26 @@ export default {
       if (!this.tutorial.title || !this.tutorial.description) {
         this.newSnackbar("Error: empty field", "error", "mdi-close-circle");
       } else {
-        TutorialDataService.create(data)
-          .then((response) => {
-            this.tutorial.id = response.data.id;
-            console.log(response.data);
-            this.submitted = true;
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+        if (ipRegex({ exact: true }).test(this.tutorial.description)) {
+          TutorialDataService.create(data)
+            .then((response) => {
+              this.tutorial.id = response.data.id;
+              console.log(response.data);
+              this.submitted = true;
+            })
+            .catch((e) => {
+              console.log(e);
+            });
 
-        this.refreshList();
-        this.newSnackbar(
-          "Success: New host added",
-          "success",
-          "mdi-check-circle"
-        );
+          this.refreshList();
+          this.newSnackbar(
+            "Success: New host added",
+            "success",
+            "mdi-check-circle"
+          );
+        } else {
+          this.newSnackbar("Error: Invalid IP", "error", "mdi-close-circle");
+        }
       }
     },
 
@@ -235,31 +245,6 @@ export default {
       this.submitted = false;
       this.tutorial = {};
       this.$refs.form.reset();
-    },
-
-    onClick() {
-      var date = new Date();
-      axios({
-        url: "http://localhost:8080/api/tutorials",
-        method: "GET",
-        responseType: "blob",
-      }).then((response) => {
-        var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-        var fileLink = document.createElement("a");
-
-        fileLink.href = fileURL;
-        fileLink.setAttribute(
-          "download",
-          "PingMonitor_" +
-            date.toLocaleDateString().replaceAll("/", "-") +
-            "_" +
-            date.toLocaleTimeString().replaceAll(":", "-") +
-            "_.json"
-        );
-        document.body.appendChild(fileLink);
-
-        fileLink.click();
-      });
     },
 
     retrieveTutorials() {
@@ -282,10 +267,16 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.refreshList();
+          this.newSnackbar(
+            "Success: All hosts removed",
+            "success",
+            "mdi-check-circle"
+          );
         })
         .catch((e) => {
           console.log(e);
         });
+      this.dialog2 = false;
     },
 
     /*     searchTitle() {
