@@ -22,7 +22,7 @@
 
       <v-divider class="my-5"></v-divider>
 
-      <v-btn small class="mr-2" color="light" to="/tutorials">
+      <v-btn small class="mr-2" color="light" to="/home">
         <v-icon>mdi-arrow-left-bold</v-icon>
       </v-btn>
 
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import TutorialDataService from "../services/TutorialDataService";
+import DataService from "../services/DataService";
 
 export default {
   name: "tutorial",
@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     getTutorial(id) {
-      TutorialDataService.get(id)
+      DataService.get(id)
         .then((response) => {
           this.currentTutorial = response.data;
           console.log(response.data);
@@ -92,7 +92,7 @@ export default {
         published: status,
       };
 
-      TutorialDataService.update(this.currentTutorial.id, data)
+      DataService.update(this.currentTutorial.id, data)
         .then((response) => {
           this.currentTutorial.published = status;
           console.log(response.data);
@@ -103,7 +103,7 @@ export default {
     },
 
     updateTutorial() {
-      TutorialDataService.update(this.currentTutorial.id, this.currentTutorial)
+      DataService.update(this.currentTutorial.id, this.currentTutorial)
         .then((response) => {
           console.log(response.data);
           this.message = "The tutorial was updated successfully!";
@@ -114,10 +114,10 @@ export default {
     },
 
     deleteTutorial() {
-      TutorialDataService.delete(this.currentTutorial.id)
+      DataService.delete(this.currentTutorial.id)
         .then((response) => {
           console.log(response.data);
-          this.$router.push({ name: "tutorials" });
+          this.$router.push({ name: "home" });
         })
         .catch((e) => {
           console.log(e);

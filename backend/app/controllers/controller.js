@@ -1,10 +1,8 @@
 const db = require("../models");
-const Tutorial = db.tutorials;
+const Home = db.homes;
 const ipRegex = require('ip-regex');
 
-// Create and Save a new Tutorial
 exports.create = (req, res) => {
-  // Validate request
   if (!req.body.title) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
@@ -14,14 +12,12 @@ exports.create = (req, res) => {
     res.status(400).send({ message: "Invalid IP" });
     return;
   }
-  // Create a Tutorial
-  const tutorial = new Tutorial({
+  const tutorial = new Home({
     title: req.body.title,
     description: req.body.description,
     published: req.body.published ? req.body.published : false,
   });
 
-  // Save Tutorial in the database
   tutorial
     .save(tutorial)
     .then(data => {
@@ -30,17 +26,16 @@ exports.create = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Tutorial."
+          err.message || "Some error occurred while creating the Home."
       });
     });
 };
 
-// Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
   const title = req.query.title;
   var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
 
-  Tutorial.find(condition)
+  Home.find(condition)
     .then(data => {
       res.send(data);
     })
@@ -52,24 +47,22 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find a single Tutorial with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Tutorial.findById(id)
+  Home.findById(id)
     .then(data => {
       if (!data)
-        res.status(404).send({ message: "Not found Tutorial with id " + id });
+        res.status(404).send({ message: "Not found Home with id " + id });
       else res.send(data);
     })
     .catch(err => {
       res
         .status(500)
-        .send({ message: "Error retrieving Tutorial with id=" + id });
+        .send({ message: "Error retrieving Home with id=" + id });
     });
 };
 
-// Update a Tutorial by the id in the request
 exports.update = (req, res) => {
   if (!req.body) {
     return res.status(400).send({
@@ -79,50 +72,48 @@ exports.update = (req, res) => {
 
   const id = req.params.id;
 
-  Tutorial.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  Home.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
+          message: `Cannot update Home with id=${id}. Maybe Home was not found!`
         });
-      } else res.send({ message: "Tutorial was updated successfully." });
+      } else res.send({ message: "Home was updated successfully." });
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating Tutorial with id=" + id
+        message: "Error updating Home with id=" + id
       });
     });
 };
 
-// Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Tutorial.findByIdAndRemove(id, { useFindAndModify: false })
+  Home.findByIdAndRemove(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
+          message: `Cannot delete Home with id=${id}. Maybe Home was not found!`
         });
       } else {
         res.send({
-          message: "Tutorial was deleted successfully!"
+          message: "Home was deleted successfully!"
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete Tutorial with id=" + id
+        message: "Could not delete Home with id=" + id
       });
     });
 };
 
-// Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {
-  Tutorial.deleteMany({})
+  Home.deleteMany({})
     .then(data => {
       res.send({
-        message: `${data.deletedCount} Tutorials were deleted successfully!`
+        message: `${data.deletedCount} Homes were deleted successfully!`
       });
     })
     .catch(err => {
@@ -133,9 +124,8 @@ exports.deleteAll = (req, res) => {
     });
 };
 
-// Find all published Tutorials
 exports.findAllPublished = (req, res) => {
-  Tutorial.find({ published: true })
+  Home.find({ published: true })
     .then(data => {
       res.send(data);
     })

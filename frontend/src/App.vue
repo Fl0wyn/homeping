@@ -10,18 +10,18 @@
       <div>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-icon class="mr-4" v-bind="attrs" v-on="on" @click="toggleTheme()"
-              >mdi-theme-light-dark</v-icon
-            >
+            <v-btn icon v-bind="attrs" v-on="on" @click="toggleTheme()">
+              <v-icon>mdi-theme-light-dark</v-icon>
+            </v-btn>
           </template>
           <span>Dark/light Theme</span>
         </v-tooltip>
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-icon v-bind="attrs" v-on="on" @click="$router.go()"
-              >mdi-refresh</v-icon
-            >
+            <v-btn icon v-bind="attrs" v-on="on" @click="$router.go()">
+              <v-icon>mdi-refresh</v-icon>
+            </v-btn>
           </template>
           <span>Reload page</span>
         </v-tooltip>
@@ -70,31 +70,6 @@ export default {
 
     toggleTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
-    },
-
-    onClick() {
-      var date = new Date();
-      axios({
-        url: "http://localhost:8080/api/tutorials",
-        method: "GET",
-        responseType: "blob",
-      }).then((response) => {
-        var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-        var fileLink = document.createElement("a");
-
-        fileLink.href = fileURL;
-        fileLink.setAttribute(
-          "download",
-          "PingMonitor_" +
-            date.toLocaleDateString().replaceAll("/", "-") +
-            "_" +
-            date.toLocaleTimeString().replaceAll(":", "-") +
-            "_.json"
-        );
-        document.body.appendChild(fileLink);
-
-        fileLink.click();
-      });
     },
   },
 

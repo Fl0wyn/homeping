@@ -4,55 +4,75 @@
       <v-col cols="12" lg="6" sm="12">
         <v-card class="mb-4">
           <v-toolbar flat dense>
-            Data updated at : <b class="mx-1"> {{ time }} </b>
+            Data updated today at : {{ time }}
+
             <v-spacer></v-spacer>
+
+            <v-divider class="ml-3" vertical></v-divider>
             <template>
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    class="mx-4"
+                  <v-btn
+                    icon
+                    :color="color"
                     v-bind="attrs"
                     v-on="on"
                     @click.stop="dialog1 = true"
-                    >mdi-plus-circle</v-icon
                   >
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
                 </template>
                 <span>Add new host</span>
               </v-tooltip>
 
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    class="mr-4"
+                  <v-btn
+                    icon
+                    :color="color"
                     v-bind="attrs"
                     v-on="on"
                     @click.stop="dialog2 = true"
-                    >mdi-delete</v-icon
                   >
+                    <v-icon>mdi-trash-can-outline</v-icon>
+                  </v-btn>
                 </template>
                 <span>Remove all hosts</span>
               </v-tooltip>
 
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    class="mr-4"
+                  <v-btn
+                    icon
+                    :color="color"
                     v-bind="attrs"
                     v-on="on"
                     @click="onClick()"
-                    >mdi-cloud-download</v-icon
                   >
+                    <v-icon>mdi-download</v-icon>
+                  </v-btn>
                 </template>
                 <span>Export data (json)</span>
               </v-tooltip>
+
+              <!--               <v-divider class="mx-4" vertical></v-divider>
+              <v-chip class="mr-4 font-weight-bold" color="success" content="5">
+                2
+              </v-chip>
+              <v-chip class="mr-4 font-weight-bold" color="error" content="4">
+                3
+              </v-chip>
+              <v-chip class="font-weight-bold" color="dark" dark content="4">
+                5
+              </v-chip> -->
             </template>
           </v-toolbar>
         </v-card>
 
         <v-card class="mx-auto" tile>
           <!-- <v-card-title>Dashboard</v-card-title> -->
-
-          <v-data-table :headers="headers" :items="tutorials">
+          <!-- START : TABLE -->
+          <v-data-table :headers="headers" :items="home" hide-default-footer>
             <template v-slot:[`item.alive`]="{ item }">
               <v-chip v-if="item.title == 'a'" small color="success" dark>
                 <b> UP </b>
@@ -61,12 +81,39 @@
             </template>
 
             <template v-slot:[`item.actions`]="{ item }">
-              <v-icon class="mx-2" @click="editTutorial(item.id)"
-                >mdi-playlist-edit</v-icon
-              >
-              <v-icon @click="deleteTutorial(item.id)">mdi-delete</v-icon>
+              <v-tooltip left>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    :color="color"
+                    v-bind="attrs"
+                    v-on="on"
+                    class="mx-1"
+                    @click="editTutorial(item.id)"
+                  >
+                    <v-icon>mdi-pencil-outline</v-icon>
+                  </v-btn>
+                </template>
+                <span>Edit</span>
+              </v-tooltip>
+
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    :color="color"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="deleteTutorial(item.id)"
+                  >
+                    <v-icon>mdi-trash-can-outline</v-icon>
+                  </v-btn>
+                </template>
+                <span>Remove</span>
+              </v-tooltip>
             </template>
           </v-data-table>
+          <!-- END : TABLE -->
         </v-card>
       </v-col>
 
@@ -170,9 +217,7 @@
           </v-btn>
         </v-toolbar>
 
-        <v-card-title class="pa-6 secondary--text">
-          Are your sure ?
-        </v-card-title>
+        <v-card-title class="pa-6"> Are your sure ? </v-card-title>
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -196,24 +241,25 @@
 </template>
 
 <script>
-import TutorialDataService from "../services/TutorialDataService";
+import DataService from "../services/DataService";
 
+import axios from "axios";
 import ipRegex from "ip-regex";
 
 export default {
-  name: "tutorials-list",
+  name: "home-list",
 
   data() {
     return {
       dialog1: false,
       dialog2: false,
 
-      // Snackbar
       snackbar: false,
       textSnackbar: "",
       colorSnackbar: "",
       iconSnackbar: "",
 
+      color: "dark",
       time: new Date().toLocaleTimeString(),
 
       text: `Submitted successfully!`,
@@ -225,7 +271,7 @@ export default {
       },
       submitted: false,
 
-      tutorials: [],
+      home: [],
       title: "",
       headers: [
         { text: "Hostname", align: "start", sortable: false, value: "title" },
@@ -240,6 +286,31 @@ export default {
   },
 
   methods: {
+    onClick() {
+      var date = new Date();
+      axios({
+        url: "http://localhost:8080/api/home",
+        method: "GET",
+        responseType: "blob",
+      }).then((response) => {
+        var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+        var fileLink = document.createElement("a");
+
+        fileLink.href = fileURL;
+        fileLink.setAttribute(
+          "download",
+          "PingMonitor_" +
+            date.toLocaleDateString().replaceAll("/", "-") +
+            "_" +
+            date.toLocaleTimeString().replaceAll(":", "-") +
+            "_.json"
+        );
+        document.body.appendChild(fileLink);
+
+        fileLink.click();
+      });
+    },
+
     newSnackbar(text, color, icon) {
       this.snackbar = true;
       this.textSnackbar = text;
@@ -257,7 +328,7 @@ export default {
         this.newSnackbar("Error: empty field", "error", "mdi-close-circle");
       } else {
         if (ipRegex({ exact: true }).test(this.tutorial.description)) {
-          TutorialDataService.create(data)
+          DataService.create(data)
             .then((response) => {
               this.tutorial.id = response.data.id;
               console.log(response.data);
@@ -286,9 +357,9 @@ export default {
     },
 
     retrieveTutorials() {
-      TutorialDataService.getAll()
+      DataService.getAll()
         .then((response) => {
-          this.tutorials = response.data.map(this.getDisplayTutorial);
+          this.home = response.data.map(this.getDisplayTutorial);
           console.log(response.data);
         })
         .catch((e) => {
@@ -301,7 +372,7 @@ export default {
     },
 
     removeAllTutorials() {
-      TutorialDataService.deleteAll()
+      DataService.deleteAll()
         .then((response) => {
           console.log(response.data);
           this.refreshList();
@@ -317,23 +388,12 @@ export default {
       this.dialog2 = false;
     },
 
-    /*     searchTitle() {
-      TutorialDataService.findByTitle(this.title)
-        .then((response) => {
-          this.tutorials = response.data.map(this.getDisplayTutorial);
-          console.log(response.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
- */
     editTutorial(id) {
       this.$router.push({ name: "tutorial-details", params: { id: id } });
     },
 
     deleteTutorial(id) {
-      TutorialDataService.delete(id)
+      DataService.delete(id)
         .then(() => {
           this.refreshList();
         })
