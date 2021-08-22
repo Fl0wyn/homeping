@@ -25,8 +25,8 @@ class DataService {
     return http.delete(`/Apps`);
   }
 
-  findByTitle(title) {
-    return http.get(`/Apps?title=${title}`);
+  findByTitle(hostname) {
+    return http.get(`/Apps?hostname=${hostname}`);
   }
 }
 

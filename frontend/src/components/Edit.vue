@@ -5,80 +5,81 @@
       color="dali"
       class="d-flex flex-column justify-space-between align-center"
     >
-      <v-card width="700px" class="mb-4">
-        <v-toolbar flat dense>
-          <v-toolbar-title> Edit Host </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <code>
-            ID:
-            {{ currentApp.id }}
-          </code>
+      <div v-if="currentApp">
+        <v-card width="700px" class="mb-4">
+          <v-toolbar flat dense>
+            <v-toolbar-title> Edit Host </v-toolbar-title>
+            <v-spacer></v-spacer>
 
-          <v-btn icon to="/"> <v-icon>mdi-close</v-icon> </v-btn>
-        </v-toolbar>
-      </v-card>
+            <code>
+              {{ currentApp.id }}
+            </code>
 
-      <v-card width="700px">
-        <div v-if="currentApp" class="edit-form">
-          <v-form ref="form" lazy-validation>
-            <v-row class="mt-6">
-              <v-col cols="12" sm="12" lg="6">
-                <v-text-field
-                  v-model="currentApp.title"
-                  :rules="[(v) => !!v || 'Hostname is required']"
-                  label="Hostname"
-                  required
-                  clearable
-                  prepend-icon="mdi-account-network-outline"
-                ></v-text-field>
+            <v-btn icon to="/"> <v-icon>mdi-close</v-icon> </v-btn>
+          </v-toolbar>
+        </v-card>
 
-                <v-text-field
-                  v-model="currentApp.description"
-                  :rules="[(v) => !!v || 'IP is required']"
-                  label="IP"
-                  required
-                  clearable
-                  prepend-icon="mdi-ip-network-outline"
-                ></v-text-field>
+        <v-card width="700px">
+          <div class="edit-form">
+            <v-form ref="form" lazy-validation>
+              <v-row class="mt-6">
+                <v-col cols="12" sm="12" lg="6">
+                  <v-text-field
+                    v-model="currentApp.hostname"
+                    :rules="[(v) => !!v || 'Hostname is required']"
+                    label="Hostname"
+                    required
+                    clearable
+                    prepend-icon="mdi-account-network-outline"
+                  ></v-text-field>
 
-                <v-text-field
-                  :value="currentApp.published ? 'Yes' : 'No'"
-                  label="Enabled"
-                  disabled
-                  :prepend-icon="
-                    currentApp.published
-                      ? 'mdi-check-circle-outline'
-                      : 'mdi-checkbox-blank-circle-outline'
-                  "
-                ></v-text-field>
-              </v-col>
+                  <v-text-field
+                    v-model="currentApp.ip"
+                    :rules="[(v) => !!v || 'IP is required']"
+                    label="IP"
+                    required
+                    clearable
+                    prepend-icon="mdi-ip-network-outline"
+                  ></v-text-field>
 
-              <v-col cols="12" sm="12" lg="6">
-                <v-text-field
-                  :value="
-                    currentApp.createdAt.split('T')[0].replaceAll('-', '/') +
-                    ' - ' +
-                    currentApp.createdAt.split('T')[1].split('.')[0]
-                  "
-                  label="Created"
-                  prepend-icon="mdi-calendar"
-                  disabled
-                ></v-text-field>
+                  <v-text-field
+                    :value="currentApp.enabled ? 'Yes' : 'No'"
+                    label="Enabled"
+                    disabled
+                    :prepend-icon="
+                      currentApp.enabled
+                        ? 'mdi-check-circle-outline'
+                        : 'mdi-checkbox-blank-circle-outline'
+                    "
+                  ></v-text-field>
+                </v-col>
 
-                <v-text-field
-                  :value="
-                    currentApp.updatedAt.split('T')[0].replaceAll('-', '/') +
-                    ' - ' +
-                    currentApp.updatedAt.split('T')[1].split('.')[0]
-                  "
-                  label="Last updated"
-                  prepend-icon="mdi-calendar"
-                  disabled
-                ></v-text-field>
+                <v-col cols="12" sm="12" lg="6">
+                  <v-text-field
+                    :value="
+                      currentApp.createdAt.split('T')[0].replaceAll('-', '/') +
+                      ' - ' +
+                      currentApp.createdAt.split('T')[1].split('.')[0]
+                    "
+                    label="Created"
+                    prepend-icon="mdi-calendar"
+                    disabled
+                  ></v-text-field>
 
-                <br />
+                  <v-text-field
+                    :value="
+                      currentApp.updatedAt.split('T')[0].replaceAll('-', '/') +
+                      ' - ' +
+                      currentApp.updatedAt.split('T')[1].split('.')[0]
+                    "
+                    label="Last updated"
+                    prepend-icon="mdi-calendar"
+                    disabled
+                  ></v-text-field>
 
-                <!-- 
+                  <br />
+
+                  <!-- 
                   
                   
                   BTN
@@ -86,50 +87,50 @@
                   
                    -->
 
-                <v-btn
-                  v-if="currentApp.published"
-                  @click="updatePublished(false)"
-                  outlined
-                  color="dark"
-                  class="mr-2"
-                  width="110"
-                >
-                  Disabled
-                </v-btn>
-                <v-btn
-                  v-else
-                  @click="updatePublished(true)"
-                  outlined
-                  color="dark"
-                  class="mr-2"
-                  width="110"
-                >
-                  Enabled
-                </v-btn>
+                  <v-btn
+                    v-if="currentApp.enabled"
+                    @click="updatePublished(false)"
+                    outlined
+                    color="dark"
+                    class="mr-2"
+                    width="110"
+                  >
+                    Disabled
+                  </v-btn>
+                  <v-btn
+                    v-else
+                    @click="updatePublished(true)"
+                    outlined
+                    color="dark"
+                    class="mr-2"
+                    width="110"
+                  >
+                    Enabled
+                  </v-btn>
 
-                <v-btn outlined color="error" class="mr-2" @click="deleteApp">
-                  Delete
-                </v-btn>
+                  <v-btn outlined color="error" class="mr-2" @click="deleteApp">
+                    Delete
+                  </v-btn>
 
-                <v-btn
-                  v-if="message == ''"
-                  outlined
-                  color="success"
-                  @click="updateApp"
-                >
-                  Update
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-form>
+                  <v-btn
+                    v-if="message == ''"
+                    outlined
+                    color="success"
+                    @click="updateApp"
+                  >
+                    Update
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-form>
 
-          <p class="mt-3">{{ message }}</p>
-        </div>
-
-        <div v-else>
-          <p class="ma-6">Please wait...</p>
-        </div>
-      </v-card>
+            <p class="mt-3">{{ message }}</p>
+          </div>
+        </v-card>
+      </div>
+      <div v-else>
+        <p class="ma-6">error</p>
+      </div>
     </v-card>
     <v-snackbar v-model="snackbar" top :color="colorSnackbar" timeout="1200">
       <v-icon class="mr-2">{{ iconSnackbar }}</v-icon>
@@ -177,14 +178,14 @@ export default {
     updatePublished(status) {
       var data = {
         id: this.currentApp.id,
-        title: this.currentApp.title,
-        description: this.currentApp.description,
-        published: status,
+        hostname: this.currentApp.hostname,
+        ip: this.currentApp.ip,
+        enabled: status,
       };
 
       DataService.update(this.currentApp.id, data)
         .then((response) => {
-          this.currentApp.published = status;
+          this.currentApp.enabled = status;
           console.log(response.data);
         })
         .catch((e) => {
@@ -193,10 +194,10 @@ export default {
     },
 
     updateApp() {
-      if (!this.currentApp.title || !this.currentApp.description) {
+      if (!this.currentApp.hostname || !this.currentApp.ip) {
         this.newSnackbar("Error: empty field", "error", "mdi-close-circle");
       } else {
-        if (ipRegex({ exact: true }).test(this.currentApp.description)) {
+        if (ipRegex({ exact: true }).test(this.currentApp.ip)) {
           DataService.update(this.currentApp.id, this.currentApp)
             .then((response) => {
               console.log(response.data);

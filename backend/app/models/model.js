@@ -1,9 +1,9 @@
 module.exports = mongoose => {
   var schema = mongoose.Schema(
     {
-      title: String,
-      description: String,
-      published: Boolean
+      hostname: String,
+      ip: String,
+      enabled: Boolean
     },
     { timestamps: true }
   );
@@ -17,3 +17,13 @@ module.exports = mongoose => {
   const App = mongoose.model("hosts", schema);
   return App;
 };
+
+
+/* 
+
+      title: String,
+      description: String,
+      published: Boolean
+
+
+*/

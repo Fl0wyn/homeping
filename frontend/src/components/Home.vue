@@ -90,7 +90,7 @@
 
         <v-data-table :headers="headers" :items="home" hide-default-footer>
           <template v-slot:[`item.alive`]="{ item }">
-            <v-chip v-if="item.title == 'a'" small color="success" dark>
+            <v-chip v-if="item.hostname == 'a'" small color="success" dark>
               <b> UP </b>
             </v-chip>
             <v-chip v-else small color="error" dark><b> DOWN </b></v-chip>
@@ -201,7 +201,7 @@
             <div v-if="!submitted">
               <v-form ref="form" lazy-validation>
                 <v-text-field
-                  v-model="tutorial.title"
+                  v-model="app.hostname"
                   :rules="[(v) => !!v || 'Hostname is required']"
                   label="Hostname"
                   required
@@ -210,7 +210,7 @@
                 ></v-text-field>
 
                 <v-text-field
-                  v-model="tutorial.description"
+                  v-model="app.ip"
                   :rules="[(v) => !!v || 'IP is required']"
                   label="IP"
                   required
@@ -303,19 +303,24 @@ export default {
       color: "dark",
       time: new Date().toLocaleTimeString(),
 
-      tutorial: {
+      app: {
         id: null,
-        title: "",
-        description: "",
-        published: false,
+        hostname: "",
+        ip: "",
+        enabled: false,
       },
       submitted: false,
 
       home: [],
-      title: "",
+      hostname: "",
       headers: [
-        { text: "Hostname", align: "start", sortable: false, value: "title" },
-        { text: "IP", value: "description", sortable: false },
+        {
+          text: "Hostname",
+          align: "start",
+          sortable: false,
+          value: "hostname",
+        },
+        { text: "IP", value: "ip", sortable: false },
         { text: "Status", value: "alive", sortable: false, align: "center" },
         { text: "Uptime", value: "uptime", sortable: false },
         { text: "TTL", value: "ttl", sortable: false },
@@ -360,17 +365,17 @@ export default {
 
     saveApp() {
       var data = {
-        title: this.tutorial.title,
-        description: this.tutorial.description,
+        hostname: this.app.hostname,
+        ip: this.app.ip,
       };
 
-      if (!this.tutorial.title || !this.tutorial.description) {
+      if (!this.app.hostname || !this.app.ip) {
         this.newSnackbar("Error: empty field", "error", "mdi-close-circle");
       } else {
-        if (ipRegex({ exact: true }).test(this.tutorial.description)) {
+        if (ipRegex({ exact: true }).test(this.app.ip)) {
           DataService.create(data)
             .then((response) => {
-              this.tutorial.id = response.data.id;
+              this.app.id = response.data.id;
               console.log(response.data);
               this.submitted = true;
               this.newSnackbar(
@@ -392,7 +397,7 @@ export default {
 
     newApp() {
       this.submitted = false;
-      this.tutorial = {};
+      this.app = {};
       this.$refs.form.reset();
     },
 
@@ -442,18 +447,15 @@ export default {
         });
     },
 
-    getDisplayApp(tutorial) {
+    getDisplayApp(app) {
       return {
-        id: tutorial.id,
-        title:
-          tutorial.title.length > 30
-            ? tutorial.title.substr(0, 30) + "..."
-            : tutorial.title,
-        description:
-          tutorial.description.length > 30
-            ? tutorial.description.substr(0, 30) + "..."
-            : tutorial.description,
-        status: tutorial.published ? "Yes" : "No",
+        id: app.id,
+        hostname:
+          app.hostname.length > 30
+            ? app.hostname.substr(0, 30) + "..."
+            : app.hostname,
+        ip: app.ip.length > 30 ? app.ip.substr(0, 30) + "..." : app.ip,
+        status: app.enabled ? "Yes" : "No",
       };
     },
   },

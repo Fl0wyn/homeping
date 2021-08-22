@@ -3,19 +3,19 @@ const App = db.apps;
 const ipRegex = require('ip-regex');
 
 exports.create = (req, res) => {
-  if (!req.body.title) {
+  if (!req.body.hostname) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
 
-  if (!ipRegex({ exact: true }).test(req.body.description)) {
+  if (!ipRegex({ exact: true }).test(req.body.ip)) {
     res.status(400).send({ message: "Invalid IP" });
     return;
   }
   const tutorial = new App({
-    title: req.body.title,
-    description: req.body.description,
-    published: req.body.published ? req.body.published : false,
+    hostname: req.body.hostname,
+    ip: req.body.ip,
+    enabled: req.body.enabled ? req.body.enabled : false,
   });
 
   tutorial
@@ -32,8 +32,8 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  const title = req.query.title;
-  var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+  const hostname = req.query.hostname;
+  var condition = hostname ? { hostname: { $regex: new RegExp(hostname), $options: "i" } } : {};
 
   App.find(condition)
     .then(data => {
@@ -125,7 +125,7 @@ exports.deleteAll = (req, res) => {
 };
 
 exports.findAllPublished = (req, res) => {
-  App.find({ published: true })
+  App.find({ enabled: true })
     .then(data => {
       res.send(data);
     })

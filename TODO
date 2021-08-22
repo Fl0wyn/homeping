@@ -1,4 +1,5 @@
 - Notification en cas de status 'DOWN' si 'Enabled' est à 'Yes'
+- Gestion message erreur console.log -> snackbar
 
 - Graphique statistique
 - Modifier export json[ok] ou csv[ko] (https://www.npmjs.com/package/json2csv)
