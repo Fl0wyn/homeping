@@ -13,7 +13,7 @@ export default new Router({
       component: () => import("./components/Home")
     },
     {
-      path: "/:id",
+      path: "/edit/:id",
       name: "app-details",
       component: () => import("./components/Edit")
     },

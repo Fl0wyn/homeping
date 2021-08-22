@@ -53,9 +53,7 @@
               <v-col cols="12" sm="12" lg="6">
                 <v-text-field
                   :value="
-                    currentApp.createdAt
-                      .split('T')[0]
-                      .replaceAll('-', '/') +
+                    currentApp.createdAt.split('T')[0].replaceAll('-', '/') +
                     ' - ' +
                     currentApp.createdAt.split('T')[1].split('.')[0]
                   "
@@ -66,9 +64,7 @@
 
                 <v-text-field
                   :value="
-                    currentApp.updatedAt
-                      .split('T')[0]
-                      .replaceAll('-', '/') +
+                    currentApp.updatedAt.split('T')[0].replaceAll('-', '/') +
                     ' - ' +
                     currentApp.updatedAt.split('T')[1].split('.')[0]
                   "
@@ -78,6 +74,14 @@
                 ></v-text-field>
 
                 <br />
+
+                <!-- 
+                  
+                  
+                  BTN
+                  
+                  
+                   -->
 
                 <v-btn
                   v-if="currentApp.published"
@@ -100,12 +104,7 @@
                   Enabled
                 </v-btn>
 
-                <v-btn
-                  outlined
-                  color="error"
-                  class="mr-2"
-                  @click="deleteApp"
-                >
+                <v-btn outlined color="error" class="mr-2" @click="deleteApp">
                   Delete
                 </v-btn>
 
@@ -213,17 +212,7 @@ export default {
       DataService.delete(this.currentApp.id)
         .then((response) => {
           console.log(response.data);
-          this.newSnackbar(
-            "Success: Hosts removed",
-            "success",
-            "mdi-check-circle"
-          );
-          this.currentApp = null;
-
-    window.setInterval(() => {
-      this.$router.push({ name: "/" });
-    }, 1200);
-
+          this.$router.push({ name: "/" });
         })
         .catch((e) => {
           console.log(e);
