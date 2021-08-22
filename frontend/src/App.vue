@@ -48,8 +48,28 @@
     <v-main class="ma-8">
       <router-view />
     </v-main>
+
+    <v-footer padless>
+      <v-col class="text-center font-weight-light subtitle-2 py-0" cols="12">
+        v{{ version }}
+        {{ "©" + new Date().getFullYear() }}
+        <a class="hrefStyle mx-6" href="/"> Ping Monitor </a>
+
+        <v-btn icon href="https://github.com/debmus/homeping" target="_blank">
+          <v-icon> mdi-github </v-icon>
+        </v-btn>
+      </v-col>
+    </v-footer>
   </v-app>
+  <!-- 
+
+    Fork me on Github 
+
+
+ -->
 </template>
+
+
 
 <script>
 import axios from "axios";
@@ -59,6 +79,7 @@ export default {
   name: "app",
 
   data: () => ({
+    version: "",
     ipInfo: "",
     timeLive: new Date().toLocaleTimeString(),
     dateLive: new Date().toLocaleDateString(),
@@ -71,6 +92,11 @@ export default {
     toggleTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
+  },
+
+  async created() {
+    const response = await fetch("VERSION");
+    this.version = await response.text();
   },
 
   mounted() {
@@ -86,3 +112,11 @@ export default {
   },
 };
 </script>
+
+
+<style scoped>
+.hrefStyle {
+  color: var(--v-primary-base);
+  text-decoration: none;
+}
+</style>
