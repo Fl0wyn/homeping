@@ -5,8 +5,6 @@
       color="dali"
       class="d-flex flex-column justify-space-between align-center"
     >
-      <!--       <v-row>
-        <v-col cols="12" sm="12" lg="12"> -->
       <!-- 
           
           
@@ -132,7 +130,6 @@
           </template>
         </v-data-table>
       </v-card>
-      <!-- </v-col> -->
 
       <!-- START : ACTIONS -->
       <!--       <v-col cols="12" lg="6" sm="12">
@@ -173,7 +170,6 @@
         </v-card>
       </v-col> -->
       <!-- END : ACTIONS -->
-      <!-- </v-row> -->
 
       <!-- 
       
@@ -271,36 +267,6 @@
       </v-dialog>
 
       <!-- 
-        
-        
-        EDIT
-        
-        
-         -->
-
-      <v-dialog v-model="dialog3" max-width="350">
-        <v-card tile>
-          <v-toolbar dark color="primary" dense>
-            <v-toolbar-title>Edit hosts</v-toolbar-title>
-
-            <v-spacer></v-spacer>
-
-            <v-btn icon @click="dialog3 = false">
-              <v-icon> mdi-close</v-icon>
-            </v-btn>
-          </v-toolbar>
-
-          <v-card-title class="pa-6"> 123</v-card-title>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="success" outlined @click="removeAllApps"> YES </v-btn>
-            <v-btn color="error" outlined @click="dialog2 = false"> NO </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
-      <!-- 
       
       
       SNACKBAR 
@@ -328,7 +294,6 @@ export default {
     return {
       dialog1: false,
       dialog2: false,
-      dialog3: false,
 
       snackbar: false,
       textSnackbar: "",
@@ -464,9 +429,7 @@ export default {
     },
 
     editApp(id) {
-      this.dialog3 = true;
-      console.log(id);
-      //this.$router.push({ name: "app-details", params: { id: id } });
+      this.$router.push({ name: "app-details", params: { id: id } });
     },
 
     deleteApp(id) {

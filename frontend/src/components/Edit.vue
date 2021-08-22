@@ -5,18 +5,21 @@
       color="dali"
       class="d-flex flex-column justify-space-between align-center"
     >
-      <v-card width="700">
-        <v-toolbar flat dark color="primary" dense>
-          <v-toolbar-title> Edit Host</v-toolbar-title>
+      <v-card width="700px" class="mb-4">
+        <v-toolbar flat dense>
+          <v-toolbar-title> Edit Host </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon to="/">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
+          <code>
+            ID:
+            {{ currentApp.id }}
+          </code>
+
+          <v-btn icon to="/"> <v-icon>mdi-close</v-icon> </v-btn>
         </v-toolbar>
+      </v-card>
 
+      <v-card width="700px">
         <div v-if="currentApp" class="edit-form">
-          <p class="headline my-4"></p>
-
           <v-form ref="form" lazy-validation>
             <v-row class="mt-6">
               <v-col cols="12" sm="12" lg="6">
@@ -108,7 +111,12 @@
                   Delete
                 </v-btn>
 
-                <v-btn outlined color="success" @click="updateApp">
+                <v-btn
+                  v-if="message == ''"
+                  outlined
+                  color="success"
+                  @click="updateApp"
+                >
                   Update
                 </v-btn>
               </v-col>
@@ -140,7 +148,6 @@ export default {
     return {
       currentApp: null,
       message: "",
-      switch1: false,
 
       snackbar: false,
       textSnackbar: "",
@@ -193,11 +200,7 @@ export default {
           DataService.update(this.currentApp.id, this.currentApp)
             .then((response) => {
               console.log(response.data);
-              this.newSnackbar(
-                "Success: Updated successfully",
-                "success",
-                "mdi-check-circle"
-              );
+              this.$router.push({ name: "home" });
             })
             .catch((e) => {
               console.log(e);
@@ -212,7 +215,7 @@ export default {
       DataService.delete(this.currentApp.id)
         .then((response) => {
           console.log(response.data);
-          this.$router.push({ name: "/" });
+          this.$router.push({ name: "home" });
         })
         .catch((e) => {
           console.log(e);
