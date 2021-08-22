@@ -14,38 +14,73 @@
           </v-btn>
         </v-toolbar>
 
-        <div v-if="currentTutorial" class="edit-form">
+        <div v-if="currentApp" class="edit-form">
           <p class="headline my-4"></p>
 
           <v-form ref="form" lazy-validation>
             <v-row class="mt-6">
               <v-col cols="12" sm="12" lg="6">
                 <v-text-field
-                  v-model="currentTutorial.title"
-                  :rules="[(v) => !!v || 'Title is required']"
+                  v-model="currentApp.title"
+                  :rules="[(v) => !!v || 'Hostname is required']"
                   label="Hostname"
                   required
+                  clearable
+                  prepend-icon="mdi-account-network-outline"
                 ></v-text-field>
 
                 <v-text-field
-                  v-model="currentTutorial.description"
-                  :rules="[(v) => !!v || 'Description is required']"
+                  v-model="currentApp.description"
+                  :rules="[(v) => !!v || 'IP is required']"
                   label="IP"
                   required
+                  clearable
+                  prepend-icon="mdi-ip-network-outline"
+                ></v-text-field>
+
+                <v-text-field
+                  :value="currentApp.published ? 'Yes' : 'No'"
+                  label="Enabled"
+                  disabled
+                  :prepend-icon="
+                    currentApp.published
+                      ? 'mdi-check-circle-outline'
+                      : 'mdi-checkbox-blank-circle-outline'
+                  "
                 ></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="12" lg="6">
                 <v-text-field
-                  :value="currentTutorial.published ? 'Yes' : 'No'"
-                  label="Enabled"
-                  readonly
+                  :value="
+                    currentApp.createdAt
+                      .split('T')[0]
+                      .replaceAll('-', '/') +
+                    ' - ' +
+                    currentApp.createdAt.split('T')[1].split('.')[0]
+                  "
+                  label="Created"
+                  prepend-icon="mdi-calendar"
+                  disabled
+                ></v-text-field>
+
+                <v-text-field
+                  :value="
+                    currentApp.updatedAt
+                      .split('T')[0]
+                      .replaceAll('-', '/') +
+                    ' - ' +
+                    currentApp.updatedAt.split('T')[1].split('.')[0]
+                  "
+                  label="Last updated"
+                  prepend-icon="mdi-calendar"
+                  disabled
                 ></v-text-field>
 
                 <br />
 
                 <v-btn
-                  v-if="currentTutorial.published"
+                  v-if="currentApp.published"
                   @click="updatePublished(false)"
                   outlined
                   color="dark"
@@ -69,12 +104,12 @@
                   outlined
                   color="error"
                   class="mr-2"
-                  @click="deleteTutorial"
+                  @click="deleteApp"
                 >
                   Delete
                 </v-btn>
 
-                <v-btn outlined color="success" @click="updateTutorial">
+                <v-btn outlined color="success" @click="updateApp">
                   Update
                 </v-btn>
               </v-col>
@@ -85,30 +120,47 @@
         </div>
 
         <div v-else>
-          <p>Please click on a Tutorial...</p>
+          <p class="ma-6">Please wait...</p>
         </div>
       </v-card>
     </v-card>
+    <v-snackbar v-model="snackbar" top :color="colorSnackbar" timeout="1200">
+      <v-icon class="mr-2">{{ iconSnackbar }}</v-icon>
+      <b>{{ textSnackbar }} </b>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
 import DataService from "../services/DataService";
+import ipRegex from "ip-regex";
 
 export default {
-  name: "home-details",
+  name: "app-details",
   data() {
     return {
-      currentTutorial: null,
+      currentApp: null,
       message: "",
       switch1: false,
+
+      snackbar: false,
+      textSnackbar: "",
+      colorSnackbar: "",
+      iconSnackbar: "",
     };
   },
   methods: {
-    getTutorial(id) {
+    newSnackbar(text, color, icon) {
+      this.snackbar = true;
+      this.textSnackbar = text;
+      this.colorSnackbar = color;
+      this.iconSnackbar = icon;
+    },
+
+    getApp(id) {
       DataService.get(id)
         .then((response) => {
-          this.currentTutorial = response.data;
+          this.currentApp = response.data;
           console.log(response.data);
         })
         .catch((e) => {
@@ -118,15 +170,15 @@ export default {
 
     updatePublished(status) {
       var data = {
-        id: this.currentTutorial.id,
-        title: this.currentTutorial.title,
-        description: this.currentTutorial.description,
+        id: this.currentApp.id,
+        title: this.currentApp.title,
+        description: this.currentApp.description,
         published: status,
       };
 
-      DataService.update(this.currentTutorial.id, data)
+      DataService.update(this.currentApp.id, data)
         .then((response) => {
-          this.currentTutorial.published = status;
+          this.currentApp.published = status;
           console.log(response.data);
         })
         .catch((e) => {
@@ -134,22 +186,44 @@ export default {
         });
     },
 
-    updateTutorial() {
-      DataService.update(this.currentTutorial.id, this.currentTutorial)
-        .then((response) => {
-          console.log(response.data);
-          this.message = "The home was updated successfully!";
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+    updateApp() {
+      if (!this.currentApp.title || !this.currentApp.description) {
+        this.newSnackbar("Error: empty field", "error", "mdi-close-circle");
+      } else {
+        if (ipRegex({ exact: true }).test(this.currentApp.description)) {
+          DataService.update(this.currentApp.id, this.currentApp)
+            .then((response) => {
+              console.log(response.data);
+              this.newSnackbar(
+                "Success: Updated successfully",
+                "success",
+                "mdi-check-circle"
+              );
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        } else {
+          this.newSnackbar("Error: Invalid IP", "error", "mdi-close-circle");
+        }
+      }
     },
 
-    deleteTutorial() {
-      DataService.delete(this.currentTutorial.id)
+    deleteApp() {
+      DataService.delete(this.currentApp.id)
         .then((response) => {
           console.log(response.data);
-          this.$router.push({ name: "/" });
+          this.newSnackbar(
+            "Success: Hosts removed",
+            "success",
+            "mdi-check-circle"
+          );
+          this.currentApp = null;
+
+    window.setInterval(() => {
+      this.$router.push({ name: "/" });
+    }, 1200);
+
         })
         .catch((e) => {
           console.log(e);
@@ -158,7 +232,7 @@ export default {
   },
   mounted() {
     this.message = "";
-    this.getTutorial(this.$route.params.id);
+    this.getApp(this.$route.params.id);
   },
 };
 </script>

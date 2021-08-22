@@ -89,7 +89,7 @@
                     v-bind="attrs"
                     v-on="on"
                     class="mx-1"
-                    @click="editTutorial(item.id)"
+                    @click="editApp(item.id)"
                   >
                     <v-icon @click="dialog3 = true">mdi-pencil-outline</v-icon>
                   </v-btn>
@@ -104,7 +104,7 @@
                     :color="color"
                     v-bind="attrs"
                     v-on="on"
-                    @click="deleteTutorial(item.id)"
+                    @click="deleteApp(item.id)"
                   >
                     <v-icon>mdi-trash-can-outline</v-icon>
                   </v-btn>
@@ -177,6 +177,8 @@
                 :rules="[(v) => !!v || 'Hostname is required']"
                 label="Hostname"
                 required
+                clearable
+                prepend-icon="mdi-account-network-outline"
               ></v-text-field>
 
               <v-text-field
@@ -184,21 +186,23 @@
                 :rules="[(v) => !!v || 'IP is required']"
                 label="IP"
                 required
+                clearable
+                prepend-icon="mdi-ip-network-outline"
               ></v-text-field>
             </v-form>
 
             <v-card-actions>
               <v-spacer></v-spacer>
 
-              <v-btn color="success" outlined @click="saveTutorial">
-                Add
+              <v-btn color="success" outlined @click="saveApp">
+                Create
               </v-btn>
             </v-card-actions>
           </div>
 
           <div v-else>
             <v-alert type="success"></v-alert>
-            {{ newTutorial() }}
+            {{ newApp() }}
           </div>
         </div>
       </v-card>
@@ -221,7 +225,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="success" outlined @click="removeAllTutorials">
+          <v-btn color="success" outlined @click="removeAllApps">
             YES
           </v-btn>
           <v-btn color="error" outlined @click="dialog2 = false"> NO </v-btn>
@@ -262,7 +266,6 @@ export default {
       color: "dark",
       time: new Date().toLocaleTimeString(),
 
-      text: `Submitted successfully!`,
       tutorial: {
         id: null,
         title: "",
@@ -289,7 +292,7 @@ export default {
     onClick() {
       var date = new Date();
       axios({
-        url: "http://localhost:8080/api/homes",
+        url: "http://localhost:8080/api/apps",
         method: "GET",
         responseType: "blob",
       }).then((response) => {
@@ -318,7 +321,7 @@ export default {
       this.iconSnackbar = icon;
     },
 
-    saveTutorial() {
+    saveApp() {
       var data = {
         title: this.tutorial.title,
         description: this.tutorial.description,
@@ -333,33 +336,33 @@ export default {
               this.tutorial.id = response.data.id;
               console.log(response.data);
               this.submitted = true;
+              this.newSnackbar(
+                "Success: New host added",
+                "success",
+                "mdi-check-circle"
+              );
             })
             .catch((e) => {
               console.log(e);
             });
 
           this.refreshList();
-          this.newSnackbar(
-            "Success: New host added",
-            "success",
-            "mdi-check-circle"
-          );
         } else {
           this.newSnackbar("Error: Invalid IP", "error", "mdi-close-circle");
         }
       }
     },
 
-    newTutorial() {
+    newApp() {
       this.submitted = false;
       this.tutorial = {};
       this.$refs.form.reset();
     },
 
-    retrieveTutorials() {
+    retrieveApps() {
       DataService.getAll()
         .then((response) => {
-          this.home = response.data.map(this.getDisplayTutorial);
+          this.home = response.data.map(this.getDisplayApp);
           console.log(response.data);
         })
         .catch((e) => {
@@ -368,10 +371,10 @@ export default {
     },
 
     refreshList() {
-      this.retrieveTutorials();
+      this.retrieveApps();
     },
 
-    removeAllTutorials() {
+    removeAllApps() {
       DataService.deleteAll()
         .then((response) => {
           console.log(response.data);
@@ -388,11 +391,11 @@ export default {
       this.dialog2 = false;
     },
 
-    editTutorial(id) {
-      this.$router.push({ name: "home-details", params: { id: id } });
+    editApp(id) {
+      this.$router.push({ name: "app-details", params: { id: id } });
     },
 
-    deleteTutorial(id) {
+    deleteApp(id) {
       DataService.delete(id)
         .then(() => {
           this.refreshList();
@@ -402,7 +405,7 @@ export default {
         });
     },
 
-    getDisplayTutorial(tutorial) {
+    getDisplayApp(tutorial) {
       return {
         id: tutorial.id,
         title:
@@ -418,11 +421,11 @@ export default {
     },
   },
   mounted() {
-    this.retrieveTutorials();
+    this.retrieveApps();
 
     window.setInterval(() => {
       this.time = new Date().toLocaleTimeString();
-      this.retrieveTutorials();
+      this.retrieveApps();
     }, 30 * 1000 * 1);
   },
 };

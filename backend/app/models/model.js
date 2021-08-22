@@ -14,6 +14,6 @@ module.exports = mongoose => {
     return object;
   });
 
-  const Home = mongoose.model("hosts", schema);
-  return Home;
+  const App = mongoose.model("hosts", schema);
+  return App;
 };

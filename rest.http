@@ -1,1 +1,1 @@
-GET http://localhost:8080/api/homes
+GET http://localhost:8080/api/apps

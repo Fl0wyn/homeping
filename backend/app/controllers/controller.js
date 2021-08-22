@@ -1,5 +1,5 @@
 const db = require("../models");
-const Home = db.homes;
+const App = db.apps;
 const ipRegex = require('ip-regex');
 
 exports.create = (req, res) => {
@@ -12,7 +12,7 @@ exports.create = (req, res) => {
     res.status(400).send({ message: "Invalid IP" });
     return;
   }
-  const tutorial = new Home({
+  const tutorial = new App({
     title: req.body.title,
     description: req.body.description,
     published: req.body.published ? req.body.published : false,
@@ -26,7 +26,7 @@ exports.create = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Home."
+          err.message || "Some error occurred while creating the App."
       });
     });
 };
@@ -35,7 +35,7 @@ exports.findAll = (req, res) => {
   const title = req.query.title;
   var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
 
-  Home.find(condition)
+  App.find(condition)
     .then(data => {
       res.send(data);
     })
@@ -50,16 +50,16 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Home.findById(id)
+  App.findById(id)
     .then(data => {
       if (!data)
-        res.status(404).send({ message: "Not found Home with id " + id });
+        res.status(404).send({ message: "Not found App with id " + id });
       else res.send(data);
     })
     .catch(err => {
       res
         .status(500)
-        .send({ message: "Error retrieving Home with id=" + id });
+        .send({ message: "Error retrieving App with id=" + id });
     });
 };
 
@@ -72,17 +72,17 @@ exports.update = (req, res) => {
 
   const id = req.params.id;
 
-  Home.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  App.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot update Home with id=${id}. Maybe Home was not found!`
+          message: `Cannot update App with id=${id}. Maybe App was not found!`
         });
-      } else res.send({ message: "Home was updated successfully." });
+      } else res.send({ message: "App was updated successfully." });
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating Home with id=" + id
+        message: "Error updating App with id=" + id
       });
     });
 };
@@ -90,30 +90,30 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Home.findByIdAndRemove(id, { useFindAndModify: false })
+  App.findByIdAndRemove(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot delete Home with id=${id}. Maybe Home was not found!`
+          message: `Cannot delete App with id=${id}. Maybe App was not found!`
         });
       } else {
         res.send({
-          message: "Home was deleted successfully!"
+          message: "App was deleted successfully!"
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete Home with id=" + id
+        message: "Could not delete App with id=" + id
       });
     });
 };
 
 exports.deleteAll = (req, res) => {
-  Home.deleteMany({})
+  App.deleteMany({})
     .then(data => {
       res.send({
-        message: `${data.deletedCount} Homes were deleted successfully!`
+        message: `${data.deletedCount} Apps were deleted successfully!`
       });
     })
     .catch(err => {
@@ -125,7 +125,7 @@ exports.deleteAll = (req, res) => {
 };
 
 exports.findAllPublished = (req, res) => {
-  Home.find({ published: true })
+  App.find({ published: true })
     .then(data => {
       res.send(data);
     })
