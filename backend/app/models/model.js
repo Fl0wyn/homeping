@@ -17,13 +17,3 @@ module.exports = mongoose => {
   const App = mongoose.model("hosts", schema);
   return App;
 };
-
-
-/* 
-
-      title: String,
-      description: String,
-      published: Boolean
-
-
-*/

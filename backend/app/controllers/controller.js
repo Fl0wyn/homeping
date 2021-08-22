@@ -12,14 +12,14 @@ exports.create = (req, res) => {
     res.status(400).send({ message: "Invalid IP" });
     return;
   }
-  const tutorial = new App({
+  const app = new App({
     hostname: req.body.hostname,
     ip: req.body.ip,
     enabled: req.body.enabled ? req.body.enabled : false,
   });
 
-  tutorial
-    .save(tutorial)
+  app
+    .save(app)
     .then(data => {
       res.send(data);
     })
@@ -42,7 +42,7 @@ exports.findAll = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving apps."
       });
     });
 };
@@ -119,7 +119,7 @@ exports.deleteAll = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all tutorials."
+          err.message || "Some error occurred while removing all apps."
       });
     });
 };
@@ -132,7 +132,7 @@ exports.findAllPublished = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving apps."
       });
     });
 };

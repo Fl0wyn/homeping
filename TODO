@@ -3,7 +3,7 @@
 
 - Graphique statistique
 - Modifier export json[ok] ou csv[ko] (https://www.npmjs.com/package/json2csv)
-- Importer/Exporrer json ou csv
+- Importer/Exporter json ou csv
 - Vérifier que l'hôte ou l'IP n'existe pas déja 
 - Authentification utilisateur
 

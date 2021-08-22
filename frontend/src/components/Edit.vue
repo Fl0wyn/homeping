@@ -10,12 +10,16 @@
           <v-toolbar flat dense>
             <v-toolbar-title> Edit Host </v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-divider class="mr-1" vertical></v-divider>
 
-            <code>
-              {{ currentApp.id }}
-            </code>
-
-            <v-btn icon to="/"> <v-icon>mdi-close</v-icon> </v-btn>
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon color="primary" v-bind="attrs" v-on="on" to="/">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </template>
+              <span>Close</span>
+            </v-tooltip>
           </v-toolbar>
         </v-card>
 
@@ -121,6 +125,10 @@
                     Update
                   </v-btn>
                 </v-col>
+                <code style="width: 100% !important" class="my-4 mx-2">
+                  <v-chip small class="float-right pink--text">json</v-chip>
+                  <pre>{{ currentApp }}</pre>
+                </code>
               </v-row>
             </v-form>
 
@@ -129,7 +137,7 @@
         </v-card>
       </div>
       <div v-else>
-        <p class="ma-6">error</p>
+        <p class="ma-6">error..</p>
       </div>
     </v-card>
     <v-snackbar v-model="snackbar" top :color="colorSnackbar" timeout="1200">
