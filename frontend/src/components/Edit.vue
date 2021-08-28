@@ -49,7 +49,8 @@
                   <v-text-field
                     :value="currentApp.enabled ? 'Yes' : 'No'"
                     label="Enabled"
-                    disabled
+                    readonly
+                    color="red"
                     :prepend-icon="
                       currentApp.enabled
                         ? 'mdi-check-circle-outline'
@@ -95,7 +96,7 @@
                     v-if="currentApp.enabled"
                     @click="updatePublished(false)"
                     outlined
-                    color="dark"
+                    color="primary"
                     class="mr-2"
                     width="110"
                   >
@@ -105,7 +106,7 @@
                     v-else
                     @click="updatePublished(true)"
                     outlined
-                    color="dark"
+                    color="primary"
                     class="mr-2"
                     width="110"
                   >
