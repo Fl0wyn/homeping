@@ -1,6 +1,7 @@
 const express = require("express");
 // const bodyParser = require("body-parser"); /* deprecated */
 const cors = require("cors");
+const path = require('path')
 
 const app = express();
 
@@ -34,7 +35,8 @@ db.mongoose
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to PingMonitor application." });
+  //res.json({ message: "Welcome to PingMonitor application." });
+  res.sendFile(path.join(__dirname, 'dist/'));
 });
 
 

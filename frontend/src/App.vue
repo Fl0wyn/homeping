@@ -55,7 +55,7 @@
         {{ "©" + new Date().getFullYear() }}
         <a class="hrefStyle mx-6" href="/"> Ping Monitor </a>
 
-        <v-btn icon href="https://github.com/debmus/homeping" target="_blank">
+        <v-btn icon href="https://github.com/Fl0wyn/homeping" target="_blank">
           <v-icon> mdi-github </v-icon>
         </v-btn>
       </v-col>

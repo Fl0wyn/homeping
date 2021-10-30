@@ -6,5 +6,3 @@
 - Importer/Exporter json ou csv
 - Vérifier que l'hôte ou l'IP n'existe pas déja 
 - Authentification utilisateur
-
-- VERSION / Dockerfile / docker-compose.yml / build.sh / .dockerignore
