@@ -21,7 +21,7 @@ module.exports = app => {
   // Delete a App with id
   router.delete("/:id", apps.delete);
 
-  // Create a new App
+  // Create all App
   router.delete("/", apps.deleteAll);
 
   app.use("/api/apps", router);

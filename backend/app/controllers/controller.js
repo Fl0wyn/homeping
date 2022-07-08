@@ -128,6 +128,7 @@ exports.findAllPublished = (req, res) => {
   App.find({ enabled: true })
     .then(data => {
       res.send(data);
+      console.log
     })
     .catch(err => {
       res.status(500).send({
