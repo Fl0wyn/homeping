@@ -34,10 +34,12 @@ db.mongoose
   });
 
 // simple route
-app.get("/", (req, res) => {
+/* app.get("/", (req, res) => { */
   //res.json({ message: "Welcome to PingMonitor application." });
-  res.sendFile(path.join(__dirname, 'dist/'));
-});
+/*   res.sendFile(path.join(__dirname, 'dist/'));
+}); */
+
+http://192.168.20.100:8080/api/Apps
 
 
 app.get('/ip', (req, res) => {

@@ -462,10 +462,10 @@ export default {
   mounted() {
     this.retrieveApps();
 
-    window.setInterval(() => {
+/*     window.setInterval(() => {
       this.time = new Date().toLocaleTimeString();
       this.retrieveApps();
-    }, 30 * 1000 * 1);
+    }, 30 * 1000 * 1); */
   },
 };
 </script>

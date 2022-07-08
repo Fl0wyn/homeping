@@ -17,16 +17,5 @@ export default new Router({
       name: "app-details",
       component: () => import("./components/Edit")
     },
-/*     {
-      path: "/",
-      alias: "/tutorials",
-      name: "tutorials",
-      component: () => import("./components/Home")
-    },
-    {
-      path: "/tutorials/:id",
-      name: "tutorial-details",
-      component: () => import("./components/Tutorial")
-    }, */
   ]
 });
