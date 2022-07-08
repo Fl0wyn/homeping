@@ -462,6 +462,7 @@ export default {
   mounted() {
     this.retrieveApps();
 
+
 /*     window.setInterval(() => {
       this.time = new Date().toLocaleTimeString();
       this.retrieveApps();
